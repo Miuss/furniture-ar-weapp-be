@@ -1,12 +1,13 @@
 require("dotenv").config();
-const createError = require('http-errors');
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
-
-const apiV1Router = require('./routes/index');
+import createError from 'http-errors'
+import express from 'express'
+import cookieParser from 'cookie-parser'
+import logger from 'morgan'
+import apiV1Router from './routes/index'
+import setSwagger from "./swagger";
 
 const app = express();
+setSwagger(app)
 
 app.use(logger('dev'));
 app.use(express.json());

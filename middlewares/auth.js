@@ -1,37 +1,39 @@
-const { User } = require('../models');
+import { User } from '../models'
 
-exports.protect = async (req, res, next) => {
+const protect = async (req, res, next) => {
   if (!req.headers.authorization) {
-    return res.status(401).json({ code: -1, message: 'You need to be logged in to visit this route'});
+    return res.status(401).json({ code: -6, msg: 'Authorization denied, only logged can visit this route'});
   }
 
-  const token = req.headers.authorization.replace("Bearer", "").trim();
+  const token = req.headers.authorization.replace("Bearer", "").trim()
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
     const user = await User.findOne({
-      attributes: [
-        "id",
-        "username",
-        "email",
-      ],
       where: {
-        id: decoded.id,
+        token,
       },
-    });
+    })
+
+    if (!user) {
+      throw new Error('Authorization denied, only logged can visit this route');
+    }
 
     req.user = user;
     next();
   } catch (err) {
-    return res.status(401).json({ code: -1, message: 'You need to be logged in to visit this route'});
+    return res.status(401).json({ code: -6, msg: err.message});
   }
-};
+}
 
-exports.admin = async (req, res, next) => {
+const admin = async (req, res, next) => {
   if (req.user.isAdmin) {
     next();
   }
 
-  return res.status(401).json({ code: -1, message: 'Authorization denied, only admins can visit this route'});
-};
+  return res.status(401).json({ code: -5, msg: 'Authorization denied, only admins can visit this route'});
+}
+
+export {
+  protect,
+  admin
+}
