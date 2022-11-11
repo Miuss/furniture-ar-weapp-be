@@ -1,4 +1,4 @@
-import { User } from '../models'
+const { User } = require('../models')
 import md5 from '../utils/md5'
 
 /**
@@ -11,15 +11,20 @@ import md5 from '../utils/md5'
 const login = async (req, res, next) => {
   const { email, password } = req.body;
 
+  console.log(email, password);
+
+  if (!email || !password) {
+    return res.status(200).json({ code: -3, msg: '参数错误' })
+  }
+
   const user = await User.findOne({ where: { email } })
-  console.log(user)
 
   if (!user) {
     return res.status(200).json({ code: -1, msg: '密码错误，请重试' })
   }
 
   // 加密提交的密码
-  const passwordMatch = this.matchPassword(password, user.salt)
+  const passwordMatch = matchPassword(password, user.salt)
 
   if (passwordMatch != user.password) {
     // 密码错误
@@ -52,8 +57,8 @@ const register = async (req, res, next) => {
     return res.status(200).json({ code: -1, msg: '该邮箱已注册，请直接登陆' })
   }
 
-  const salt = this.createSalt() // 生成加密盐值
-  const passwordMatch = this.matchPassword(password, salt)  // 生成加密后的密码
+  const salt = createSalt() // 生成加密盐值
+  const passwordMatch = matchPassword(password, salt)  // 生成加密后的密码
 
   const saveUser = await User.create({ 
     username: '方块人'+randomString(6),
@@ -76,7 +81,7 @@ const randomString = (e) => {
   var t = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz012345678",
   a = t.length,
   n = "";
-  for (i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a));
+  for (let i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a));
   return n
 }
 
@@ -106,8 +111,6 @@ const createToken = (user) => {
 const createSalt = () => {
   return md5(md5(Math.ceil(Math.random()*100)+md5(new Date().getTime())+Math.ceil(Math.random()*100)))
 }
-
-
 
 export {
   login,

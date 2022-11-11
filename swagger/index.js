@@ -2,16 +2,35 @@ import swaggerUi from 'swagger-ui-express'
 import swaggerJSDoc from 'swagger-jsdoc'
 import { swaggerConfig } from '../config'
 
-export default function setSwagger(app) {
+export default function setSwagger (app) {
     const options = {
         definition: {
             openapi: swaggerConfig.openapi,
             info: {
                 title: swaggerConfig.title,
-                version: swaggerConfig.version
-            }
+                version: swaggerConfig.version,
+                description: swaggerConfig.des,
+            },
+            host: 'localhost:3001',
+            basePath: '/api',
+            schemes: ['http', 'https'],
+            components: {
+                securitySchemes: {
+                    Bearer: {
+                        type: "apiKey",
+                        description: "JWT Authorization format: Bearer {token}.",
+                        name: "Authorization",
+                        in: "header"
+                    }
+                }
+            },
+            security: [
+                {
+                    Bearer: []
+                }
+            ]
         },
-        apis: swaggerConfig.apis
+        apis: swaggerConfig.apis,
     }
 
     const swaggerSpec = swaggerJSDoc(options)

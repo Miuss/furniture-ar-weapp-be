@@ -29,6 +29,9 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
+console.log('server start on: http://localhost:'+port)
+console.log('server apidoc start on: http://localhost:'+port+'/api-docs')
+
 /**
  * Normalize a port into a number, string, or false.
  */

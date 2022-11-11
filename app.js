@@ -3,18 +3,20 @@ import createError from 'http-errors'
 import express from 'express'
 import cookieParser from 'cookie-parser'
 import logger from 'morgan'
-import apiV1Router from './routes/index'
-import setSwagger from "./swagger";
+import apiV1Router from './routes/auth'
+import setSwagger from './swagger'
+import setRouter from './routes'
 
 const app = express();
-setSwagger(app)
+
+setSwagger(app);
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/api/v1', apiV1Router);  // ApiV1路由
+setRouter(app);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -29,7 +31,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.json({ code: -1, msg: err.message });
 });
 
 module.exports = app;
