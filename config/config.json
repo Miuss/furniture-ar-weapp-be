@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "root",
+    "password": "1234567890",
+    "database": "mcservers-cn",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": "1234567890",
+    "database": "mcservers-cn",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "mcservers_cn",
+    "password": "yT6zp8rrxAnBJEnt",
+    "database": "mcservers_cn",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
