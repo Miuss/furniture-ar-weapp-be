@@ -1,5 +1,5 @@
 import express from 'express'
-import { login, register } from '../controllers/Auth'
+import * as authController from '../controllers/Auth'
 
 
 const router = express.Router();
@@ -28,7 +28,7 @@ const router = express.Router();
  *       200:
  *         description: success
  */
-router.route('/login').post(login);
+router.route('/login').post(authController.login);
 
 
 /**
@@ -55,7 +55,31 @@ router.route('/login').post(login);
  *       200:
  *         description: success
  */
-router.route('/register').post(register);
+router.route('/register').post(authController.register);
 
+
+/**
+ * 发送验证码
+ * @swagger
+ * /api/v1/auth/sendCode:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: 发送验证码
+ *     description: 发送验证码
+ *     requestBody:
+ *       content:
+ *        application/x-www-form-urlencoded:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              email:
+ *                type: string
+ *                example: miusssss@qq.com
+ *     responses:
+ *       200:
+ *         description: success
+ */
+router.route('/sendCode').post(authController.sendCode);
 
 export default router;

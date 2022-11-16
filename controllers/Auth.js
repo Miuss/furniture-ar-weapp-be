@@ -1,5 +1,6 @@
 const { User } = require('../models')
 import md5 from '../utils/md5'
+import * as mailer from '../utils/nodemailer'
 
 /**
  * 用户登陆
@@ -9,7 +10,7 @@ import md5 from '../utils/md5'
  * @returns 
  */
 const login = async (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password } = req.body
 
   console.log(email, password);
 
@@ -39,7 +40,7 @@ const login = async (req, res, next) => {
 
   res.status(200).json({ code: 0, msg: '登陆成功', data: {
     token: token
-  } });
+  } })
 }
 
 /**
@@ -65,10 +66,40 @@ const register = async (req, res, next) => {
     email,
     password: passwordMatch,
     salt,
-  });
+  })
   console.log(`用户注册成功（#${saveUser.id}）`)
 
   return res.status(200).json({ code: 0, msg: '注册成功' })
+}
+
+/**
+ * 发送验证码
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+const sendCode = async (req, res, next) => {
+  const { email } = req.body
+  
+  const user = await User.findOne({ where: { email } })
+
+  if (!user) {
+    return res.status(200).json({ code: -1, msg: '用户不存在' })
+  }
+
+  const code = randomString(6)  // 生成随机6位验证码
+
+  mailer.sendEmail({
+    email: 'miusssss@qq.com',
+    title: '测试邮件',
+    template: 'verifyCode',
+    keys: {
+      name: user.username,
+      code
+    }
+  })
+
+  return res.status(200).json({ code: 0, msg: '发送成功' })
 }
 
 /**
@@ -81,7 +112,7 @@ const randomString = (e) => {
   var t = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz012345678",
   a = t.length,
   n = "";
-  for (let i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a));
+  for (let i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a))
   return n
 }
 
@@ -115,4 +146,5 @@ const createSalt = () => {
 export {
   login,
   register,
+  sendCode
 }
