@@ -1,4 +1,4 @@
-const { User } = require('../models')
+import { User } from '../models'
 import md5 from '../utils/md5'
 import * as mailer from '../utils/nodemailer'
 
@@ -50,12 +50,27 @@ const login = async (req, res, next) => {
  * @param {*} next 
  */
 const register = async (req, res, next) => {
-  const { email, password } = req.body
+  const { email, password, repassword, verifyCode } = req.body
+
+  const registerVerifyCode = req.session.registerVerifyCode // 从session获取验证码
+
+  if (verifyCode != registerVerifyCode) {
+    return res.status(200).json({ code: -1, msg: '邮箱验证码不正确，请重试' })
+  }
+
+  if (password.length > 8) {
+    return res.status(200).json({ code: -2, msg: '密码长度必须>=8位，请重试' })
+  }
+
+  if (password != repassword) {
+    return res.status(200).json({ code: -3, msg: '两次输入的密码不一致，请重试' })
+  }
   
+  // 查找是否有重复注册的用户
   const user = await User.findOne({ where: { email } })
 
   if (user) {
-    return res.status(200).json({ code: -1, msg: '该邮箱已注册，请直接登陆' })
+    return res.status(200).json({ code: -4, msg: '该邮箱已注册，请直接登陆' })
   }
 
   const salt = createSalt() // 生成加密盐值
@@ -73,31 +88,33 @@ const register = async (req, res, next) => {
 }
 
 /**
- * 发送验证码
+ * 发送注册邮箱验证码
  * @param {*} req 
  * @param {*} res 
  * @param {*} next 
  */
-const sendCode = async (req, res, next) => {
+const sendRegEmailCode = async (req, res, next) => {
   const { email } = req.body
-  
-  const user = await User.findOne({ where: { email } })
 
-  if (!user) {
-    return res.status(200).json({ code: -1, msg: '用户不存在' })
+  const registerVerifyCodeTime = req.session.registerVerifyCodeTime // 上次验证码发送时间
+
+  if (registerVerifyCodeTime != undefined && registerVerifyCodeTime + 60000 > Date.now()) {
+    return res.status(200).json({ code: -1, msg: '请勿快速重复此操作' })
   }
 
-  const code = randomString(6)  // 生成随机6位验证码
+  const code = randomString(6); //生成随机6位验证码
 
   mailer.sendEmail({
-    email: 'miusssss@qq.com',
-    title: '测试邮件',
+    email: email,
+    title: '注册验证码',
     template: 'verifyCode',
     keys: {
-      name: user.username,
       code
     }
   })
+
+  req.session.registerVerifyCode = code; // 存入session
+  req.session.registerVerifyCodeTime = Date.now(); // 存入session
 
   return res.status(200).json({ code: 0, msg: '发送成功' })
 }
@@ -146,5 +163,5 @@ const createSalt = () => {
 export {
   login,
   register,
-  sendCode
+  sendRegEmailCode
 }

@@ -1,9 +1,5 @@
 import nodemailer from 'nodemailer'
-
-// 引入handlebars
 import handlebars from 'handlebars'
-
-// 引入mjml方法
 import mjml2html from 'mjml'
 import fs from 'fs'
 

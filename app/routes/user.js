@@ -1,7 +1,6 @@
 import express from 'express'
-import { protect } from '../middlewares/auth'
+import { userAuth } from '../middlewares/auth'
 import { getMainUserInfo } from '../controllers/User'
-
 
 const router = express.Router();
 
@@ -18,7 +17,7 @@ const router = express.Router();
  *       200:
  *         description: success
  */
-router.route('/info').get(protect, getMainUserInfo);
+router.route('/info').get(userAuth, getMainUserInfo);
 
 
 export default router;

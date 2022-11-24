@@ -27,15 +27,14 @@
       </mj-section>
       <mj-section padding="0 20px">
         <mj-column>
-          <mj-text color="#fff" font-size="16px">Dear {{name}}</mj-text>
-          <mj-text color="#fff" font-size="16px">好叭，其实你什么也没有注册，这只是我发的一个测试邮件模板！</mj-text>
+          <mj-text color="#fff" font-size="16px">{{code}}</mj-text>
           <mj-spacer height="10px"></mj-spacer>
-          <mj-button background-color="orange" href="https://www.baidu.com">点一下啥也不会发生</mj-button>
+          <mj-button background-color="orange" href="https://www.mcservers.cn">www.mcservers.cn</mj-button>
         </mj-column>
       </mj-section>
       <mj-section>
         <mj-column>
-          <mj-text color="#fff" font-size="16px" align="center">Copyright © 2021. MarcusCheung All rights reserved.</mj-text>
+          <mj-text color="#fff" font-size="16px" align="center">Copyright © 2021. McServers.cn All rights reserved.</mj-text>
         </mj-column>
       </mj-section>
     </mj-wrapper>

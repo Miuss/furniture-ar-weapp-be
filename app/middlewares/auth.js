@@ -1,6 +1,6 @@
 import { User } from '../models'
 
-const protect = async (req, res, next) => {
+const userAuth = async (req, res, next) => {
   if (!req.headers.authorization) {
     return res.status(401).json({ code: -6, msg: 'Authorization denied, only logged can visit this route'});
   }
@@ -25,7 +25,7 @@ const protect = async (req, res, next) => {
   }
 }
 
-const admin = async (req, res, next) => {
+const adminAuth = async (req, res, next) => {
   if (req.user.isAdmin) {
     next();
   }
@@ -34,6 +34,6 @@ const admin = async (req, res, next) => {
 }
 
 export {
-  protect,
-  admin
+  userAuth,
+  adminAuth
 }

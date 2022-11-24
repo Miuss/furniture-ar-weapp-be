@@ -7,7 +7,7 @@ export const swaggerConfig = {
     des: '我的世界服务器网 API文档',
     version: '1.0.0',
     apis: [
-        path.join(__dirname, '/routes/*.js')
+        path.join(__dirname, '/app/routes/*.js')
     ],
     routerPath: '/api-docs'
 }

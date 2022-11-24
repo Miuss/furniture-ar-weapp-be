@@ -49,14 +49,17 @@ router.route('/login').post(authController.login);
  *              email:
  *                type: string
  *                example: miusssss@qq.com
+ *              repassword:
+ *                type: string
  *              password:
+ *                type: string
+ *              verifyCode:
  *                type: string
  *     responses:
  *       200:
  *         description: success
  */
 router.route('/register').post(authController.register);
-
 
 /**
  * 发送验证码
@@ -80,6 +83,6 @@ router.route('/register').post(authController.register);
  *       200:
  *         description: success
  */
-router.route('/sendCode').post(authController.sendCode);
+router.route('/sendCode').post(authController.sendRegEmailCode);
 
 export default router;
