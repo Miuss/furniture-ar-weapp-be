@@ -30,7 +30,7 @@ const router = express.Router();
 router.route('/add').post(addServer);
 
 /**
- * 获取服务器列表
+ * 获取服务器列表1
  * @swagger
  * /api/v1/server/list:
  *   get:
