@@ -29,7 +29,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'ServerData',
+    tableName: 'server_data',
     timestamps: true,
     paranoid: true,
     indexes: [

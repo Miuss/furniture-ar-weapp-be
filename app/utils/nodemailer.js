@@ -16,7 +16,7 @@ const sendEmail = async ({ email, title, template, keys = {} }) => {
       secureConnection: true,
     });
 
-    const temp = handlebars.compile(fs.readFileSync(`./utils/mails/${template}.mjml`, "utf8"))
+    const temp = handlebars.compile(fs.readFileSync(`${__dirname}/mails/${template}.mjml`, "utf8"))
 
     const mailOptions = {
       from: '"我的世界服务器网" <i@mail.mcservers.cn>', // 发送者昵称和地址

@@ -104,7 +104,7 @@ const sendRegEmailCode = async (req, res, next) => {
 
   const code = randomString(6); //生成随机6位验证码
 
-  mailer.sendEmail({
+  await mailer.sendEmail({
     email: email,
     title: '注册验证码',
     template: 'verifyCode',

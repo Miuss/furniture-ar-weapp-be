@@ -22,60 +22,70 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true,
       comment: "服务器创建用户id"
     },
-    server_ip: {
+    serverIp: {
       type: DataTypes.STRING(255),
       allowNull: true,
-      comment: "服务器IP地址"
+      comment: "服务器IP地址",
+      field: 'server_ip'
     },
-    server_port: {
+    serverPort: {
       type: DataTypes.STRING(255),
       allowNull: true,
-      comment: "服务器端口"
+      comment: "服务器端口",
+      field: 'server_port'
     },
-    server_type: {
+    serverType: {
       type: DataTypes.STRING(255),
       allowNull: true,
-      comment: "服务器类型（java、pe）"
+      comment: "服务器类型（java、pe）",
+      field: 'server_type'
     },
-    server_max_player: {
+    serverMaxPlayer: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      comment: "服务器最大可在线玩家数"
+      comment: "服务器最大可在线玩家数",
+      field: 'server_max_player'
     },
-    server_online_player: {
+    serverOnlinePlayer: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      comment: "服务器在线玩家数"
+      comment: "服务器在线玩家数",
+      field: 'server_online_player'
     },
-    server_ping: {
+    serverPing: {
       type: DataTypes.STRING(255),
       allowNull: true,
-      comment: "服务器延迟"
+      comment: "服务器延迟",
+      field: 'server_ping'
     },
-    server_version: {
+    serverVersion: {
       type: DataTypes.STRING(255),
       allowNull: true,
-      comment: "服务器版本号"
+      comment: "服务器版本号",
+      field: 'server_version'
     },
-    server_status: {
+    serverStatus: {
       type: DataTypes.STRING(255),
       allowNull: true,
-      comment: "服务器状态"
+      comment: "服务器状态",
+      field: 'server_status'
     },
-    server_country: {
+    serverCountry: {
       type: DataTypes.STRING(255),
       allowNull: true,
-      comment: "服务器所在国家"
+      comment: "服务器所在国家",
+      field: 'server_country'
     },
-    server_offline_count: {
+    serverOfflineCount: {
       type: DataTypes.INTEGER,
       allowNull: true,
       defaultValue: 0,
-      comment: "服务器离线次数（5分钟一次）"
+      comment: "服务器离线次数（5分钟一次）",
+      field: 'server_offline_count'
     }
   }, {
     sequelize,
-    tableName: 'Server',
+    tableName: 'server',
     timestamps: true,
     paranoid: true,
     indexes: [

@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "root",
-    "password": "Miu051900",
-    "database": "mcservers-cn",
-    "host": "127.0.0.1",
+    "username": "mcservers_cn",
+    "password": "yT6zp8rrxAnBJEnt",
+    "database": "mcservers_cn",
+    "host": "103.219.30.40",
     "dialect": "mysql"
   },
   "test": {

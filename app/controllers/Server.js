@@ -18,6 +18,19 @@ const addServer = async (req, res, next) => {
   }
 }
 
+const getServerList = async (req, res, next) => {
+  console.log(123)
+
+  try {
+    const result = await Server.findAll();
+    console.log(result)
+    res.status(200).json({ code: 0, msg: '成功获取服务器列表', data: result });
+  } catch(e) {
+    console.log(e)
+  }
+
+}
+
 const getServerStatus = async (req, res, next) => {
   const { ip, port} = req.query
   console.log(ip, port)
@@ -32,5 +45,6 @@ const getServerStatus = async (req, res, next) => {
 }
 
 export {
-  addServer
+  addServer,
+  getServerList
 }
