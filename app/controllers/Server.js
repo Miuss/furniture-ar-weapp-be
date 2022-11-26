@@ -1,6 +1,4 @@
 import { Server } from '../models'
-import * as mcstatus from 'mcstatus.js'
-import dns2 from 'dns2'
 
 /**
  * 用户添加服务器
@@ -36,9 +34,7 @@ const getServerStatus = async (req, res, next) => {
   console.log(ip, port)
 
   try {
-    const result = await queryMinecraftStatus(ip, port)
-    console.log(result)
-    res.status(200).json({ code: 0, msg: '成功获取服务器状态', data: result });
+    res.status(200).json({ code: 0, msg: '成功获取服务器状态', data: null });
   } catch(e) {
     console.log(e)
   }
