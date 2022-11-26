@@ -5,14 +5,19 @@ import { User } from '../models'
  */
 
 const getMainUserInfo = async (req, res, next) => {
-  const user = await User.findOne({
-    attributes: [username, description, email],
-    where: {
-      id: req.user.id
-    }
-  });
+  try {
+    const user = await User.findOne({
+      attributes: [username, description, email],
+      where: {
+        id: req.user.id
+      }
+    });
+  
+    res.status(200).json({ code: 0, msg: '获取用户成功', data: user });
 
-  res.status(200).json({ code: 0, msg: '获取用户成功', data: user });
+  } catch(e) {
+    res.status(200).json({ code: -1, msg: e.message });
+  }
 }
 
 
@@ -21,18 +26,22 @@ const getMainUserInfo = async (req, res, next) => {
  */
 
  const getUserById = async (req, res, next) => {
-  if (req.params.id == '') {
-    res.status(200).json({ code: -1, msg: '参数错误' });
-  }
-
-  const user = await User.findOne({
-    attributes: [username, description, email],
-    where: {
-      id: req.params.id
+  try {
+    if (req.params.id == '') {
+      throw new Error('参数错误')
     }
-  });
 
-  res.status(200).json({ code: 0, msg: '获取用户成功', data: user });
+    const user = await User.findOne({
+      attributes: [username, description, email],
+      where: {
+        id: req.params.id
+      }
+    });
+
+    res.status(200).json({ code: 0, msg: '获取用户成功', data: user });
+  } catch(e) {
+    res.status(200).json({ code: -1, msg: e.message });
+  }
 }
 
 export {

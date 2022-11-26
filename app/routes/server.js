@@ -36,8 +36,8 @@ router.route('/add').post(addServer);
  *   get:
  *     tags:
  *       - Server
- *     summary: 获取服务器列表1
- *     description: 获取服务器列表1
+ *     summary: 获取服务器列表
+ *     description: 获取服务器列表
  *     responses:
  *       200:
  *         description: success
@@ -68,6 +68,6 @@ router.route('/list').get(getServerList);
  *       200:
  *         description: success
  */
-// router.route('/status').get(getServerStatus);
+router.route('/status').get(getServerStatus);
 
 export default router;
