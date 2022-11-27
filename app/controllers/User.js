@@ -7,15 +7,16 @@ import { User } from '../models'
 const getMainUserInfo = async (req, res, next) => {
   try {
     const user = await User.findOne({
-      attributes: [username, description, email],
+      attributes: ['id', 'username', 'description', 'email'],
       where: {
         id: req.user.id
       }
     });
   
-    res.status(200).json({ code: 0, msg: '获取用户成功', data: user });
+    res.status(200).json({ code: 0, msg: '成功获取用户信息', data: user });
 
   } catch(e) {
+    console.error(e)
     res.status(200).json({ code: -1, msg: e.message });
   }
 }
@@ -32,7 +33,7 @@ const getMainUserInfo = async (req, res, next) => {
     }
 
     const user = await User.findOne({
-      attributes: [username, description, email],
+      attributes: ['id', 'username', 'description', 'email'],
       where: {
         id: req.params.id
       }
@@ -40,6 +41,7 @@ const getMainUserInfo = async (req, res, next) => {
 
     res.status(200).json({ code: 0, msg: '获取用户成功', data: user });
   } catch(e) {
+    console.error(e)
     res.status(200).json({ code: -1, msg: e.message });
   }
 }

@@ -29,6 +29,8 @@ const router = express.Router();
  *                type: string
  *              serverType:
  *                type: string
+ *              serverTags:
+ *                type: array
  *     responses:
  *       200:
  *         description: success

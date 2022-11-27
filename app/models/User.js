@@ -9,35 +9,33 @@ module.exports = function(sequelize, DataTypes) {
     },
     username: {
       type: DataTypes.STRING(255),
-      allowNull: true
+      allowNull: false,
+      comment: "用户名"
     },
     password: {
       type: DataTypes.STRING(255),
-      allowNull: true
+      allowNull: false,
+      comment: "用户密码"
     },
     salt: {
       type: DataTypes.STRING(255),
-      allowNull: true
+      allowNull: false,
+      comment: "用户密码加密盐值"
     },
     email: {
       type: DataTypes.STRING(255),
-      allowNull: true
+      allowNull: false,
+      comment: "用户邮箱"
     },
     description: {
       type: DataTypes.STRING(255),
-      allowNull: true
+      allowNull: true,
+      comment: "用户简介"
     },
     token: {
       type: DataTypes.STRING(255),
-      allowNull: true
-    },
-    verifyCode: {
-      type: DataTypes.STRING(255),
-      allowNull: true
-    },
-    verifyCodeEndTime: {
-      type: DataTypes.DATE,
-      allowNull: true
+      allowNull: true,
+      comment: "用户token"
     }
   }, {
     sequelize,

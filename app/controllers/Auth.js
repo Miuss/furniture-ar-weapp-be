@@ -43,6 +43,7 @@ const login = async (req, res, next) => {
       token: token
     } })
   } catch(e) {
+    console.error(e)
     res.status(200).json({ code: -1, msg: e.message });
   }
 }
@@ -92,6 +93,7 @@ const register = async (req, res, next) => {
   
     return res.status(200).json({ code: 0, msg: '注册成功' })
   } catch(e) {
+    console.error(e)
     res.status(200).json({ code: -1, msg: e.message });
   }
 }
@@ -128,6 +130,7 @@ const sendRegEmailCode = async (req, res, next) => {
   
     res.status(200).json({ code: 0, msg: '发送成功' })
   } catch(e) {
+    console.error(e)
     res.status(200).json({ code: -1, msg: e.message });
   }
 }

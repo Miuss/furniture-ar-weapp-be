@@ -1,4 +1,4 @@
-import { Server } from '../models'
+import { sequelize, Server, ServerTagData } from '../models'
 import axios from 'axios'
 
 /**
@@ -8,14 +8,18 @@ import axios from 'axios'
  * @param {*} next 
  */
 const addServer = async (req, res, next) => {
+  const t = await sequelize.transaction()
+
   try {
     const body = req.body;
+    const serverTags = body.serverTags.split(',')
 
     if (body.name == '' 
       || body.desc == '' 
       || body.serverIp == '' 
       || body.serverPort == '' 
-      || body.serverType == '') {
+      || body.serverType == ''
+      || body.serverTags.length == 0) {
       throw new Error('参数错误')
     }
     
@@ -34,7 +38,7 @@ const addServer = async (req, res, next) => {
       throw new Error('该服务器处于离线状态，请重试')
     }
 
-    body.uid = req.user.id // 用户Id
+    body.userId = req.user.id // 用户Id
     body.serverMaxPlayer = result.data.data.players.max // 服务器最大在线人数
     body.serverOnlinePlayer = result.data.data.players.online // 服务器在线人数
     body.serverPing = '0' // 服务器延迟（ms）
@@ -49,10 +53,32 @@ const addServer = async (req, res, next) => {
     }
 
     const newServer = await Server.create(body)
-    console.log(newServer)
+
+    // 提交服务器标签绑定记录数据
+    const serverTagDatas = Promise.all(serverTags.forEach(async (item) => {
+      return new Promise(async (resolve, reject) => {
+        const serverTagData = await ServerTagData.create({
+          serverId: newServer.id,
+          serverTagId: item,
+          userId: req.user.id
+        })
+
+        if (serverTagData instanceof ServerTagData) {
+          resolve(serverTagData)
+        }
+
+        reject('数据库提交失败')
+      })
+    }))
+
+    newServer.serverTags = serverTagDatas
+
+    await t.commit()
 
     res.status(200).json({ code: 0, msg: '服务器发布成功', data: newServer });
   } catch(e) {
+    console.error(e)
+    await t.rollback()
     res.status(200).json({ code: -1, msg: e.message });
   }
 }
@@ -70,6 +96,7 @@ const getServerList = async (req, res, next) => {
     console.log(result)
     res.status(200).json({ code: 0, msg: '成功获取服务器列表', data: result });
   } catch(e) {
+    console.error(e)
     res.status(200).json({ code: -1, msg: e.message });
   }
 
@@ -93,6 +120,7 @@ const getServerStatus = async (req, res, next) => {
 
     res.status(200).json({ code: 0, msg: '成功获取服务器状态', data: result.data });
   } catch(e) {
+    console.error(e)
     res.status(200).json({ code: -1, msg: e.message });
   }
 }
