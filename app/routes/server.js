@@ -23,11 +23,17 @@ const router = express.Router();
  *                type: string
  *              desc:
  *                type: string
+ *              serverIp:
+ *                type: string
+ *              serverPort:
+ *                type: string
+ *              serverType:
+ *                type: string
  *     responses:
  *       200:
  *         description: success
  */
-router.route('/add').post(addServer);
+router.route('/add').post(userAuth, addServer);
 
 /**
  * 获取服务器列表
@@ -68,6 +74,6 @@ router.route('/list').get(getServerList);
  *       200:
  *         description: success
  */
-router.route('/status').get(getServerStatus);
+router.route('/status').get(userAuth, getServerStatus);
 
 export default router;

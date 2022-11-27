@@ -34,7 +34,7 @@ const login = async (req, res, next) => {
     }
 
     // 登陆成功
-    const token = this.createToken(user)
+    const token = createToken(user)
 
     user.token = token
     await user.save()
@@ -64,7 +64,7 @@ const register = async (req, res, next) => {
       throw new Error('邮箱验证码不正确，请重试')
     }
   
-    if (password.length > 8) {
+    if (password.length < 8) {
       throw new Error('密码长度必须>=8位，请重试')
     }
   
