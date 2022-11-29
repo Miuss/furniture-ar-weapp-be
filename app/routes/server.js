@@ -5,6 +5,40 @@ import { addServer, getServerStatus, getServerList } from '../controllers/Server
 const router = express.Router();
 
 /**
+ * 获取服务器列表
+ * @swagger
+ * /api/v1/server/list:
+ *   get:
+ *     tags:
+ *       - Server
+ *     summary: 获取服务器列表
+ *     description: 获取服务器列表
+ *     parameters:
+ *      - name: serverType
+ *        in: query
+ *        description: 服务器类型（java,pe）
+ *        required: false
+ *        type: string
+ *      - name: serverTagId
+ *        in: query
+ *        description: 服务器标签id
+ *        required: false
+ *        type: string
+ *      - name: pageIndex
+ *        in: query
+ *        required: false
+ *        type: string
+ *      - name: pageSize
+ *        in: query
+ *        required: false
+ *        type: string
+ *     responses:
+ *       200:
+ *         description: success
+ */
+router.route('/list').get(getServerList);
+
+/**
  * 添加服务器
  * @swagger
  * /api/v1/server/add:
@@ -36,21 +70,6 @@ const router = express.Router();
  *         description: success
  */
 router.route('/add').post(userAuth, addServer);
-
-/**
- * 获取服务器列表
- * @swagger
- * /api/v1/server/list:
- *   get:
- *     tags:
- *       - Server
- *     summary: 获取服务器列表
- *     description: 获取服务器列表
- *     responses:
- *       200:
- *         description: success
- */
-router.route('/list').get(getServerList);
 
 /**
  * 获取服务器数据

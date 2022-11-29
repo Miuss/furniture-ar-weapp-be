@@ -24,8 +24,10 @@ const getMainUserInfo = async (req, res, next) => {
 
 /**
  * 通过ID查询用户信息
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
  */
-
  const getUserById = async (req, res, next) => {
   try {
     if (req.params.id == '') {

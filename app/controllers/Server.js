@@ -1,4 +1,4 @@
-import { sequelize, Server, ServerTagData } from '../models'
+import { sequelize, User, Server, ServerTag, ServerTagData } from '../models'
 import axios from 'axios'
 
 /**
@@ -84,7 +84,7 @@ const addServer = async (req, res, next) => {
 }
 
 /**
- * 获取服务器列表
+ * 分页查询服务器列表
  * @param {*} req 
  * @param {*} res 
  * @param {*} next 
@@ -92,9 +92,57 @@ const addServer = async (req, res, next) => {
 const getServerList = async (req, res, next) => {
 
   try {
-    const result = await Server.findAll();
-    console.log(result)
-    res.status(200).json({ code: 0, msg: '成功获取服务器列表', data: result });
+    const serverTagId = req.query.serverTagId || ''
+    const serverType = req.query.serverType || ''
+    const pageIndex = parseInt(req.query.pageIndex || 0)
+    const pageSize = parseInt(req.query.pageSize || 10)
+    let where = ''
+
+    // 服务器标签
+    if (serverTagId!='') {
+      where += `and server.id = server_tag_data.serverId and server_tag_data.serverTagId = '${serverTagId}'`
+    }
+
+    //  服务器类型
+    if (serverType!='') {
+      where += `and server.server_type = '${serverType}'`
+    }
+
+    const result = await sequelize.query(`select distinct server.* from server,server_tag_data where 1=1 ${where} limit ${pageIndex},${pageSize}`, {
+      model: Server,
+      mapToModel: true // 如果你有任何映射字段,则在此处传递 true
+    })
+
+    const [ total ] = await sequelize.query(`select count(DISTINCT server.id) as count from server,server_tag_data where 1=1 ${where}`)
+
+    const serverList = await Promise.all(result.map(async (item) => {
+      // 查询服务器标签
+      const serverTags = await sequelize.query(`select server_tag.* from server_tag left join server_tag_data on server_tag.id = server_tag_data.serverTagId where server_tag_data.serverId = ${item.id}`, {
+        model: ServerTag,
+        mapToModel: true // 如果你有任何映射字段,则在此处传递 true
+      })
+
+      item.dataValues.serverTags = serverTags
+      item._previousDataValues.serverTags = serverTags
+
+      // 查询服务器提交人信息
+      const user = await User.findOne({
+        attributes: ['username', 'description'],
+        where: {
+          id: item.userId
+        }
+      });
+
+      item.dataValues.user = user
+      item._previousDataValues.user = user
+
+      return item
+    }))
+
+    res.status(200).json({ code: 0, msg: '成功获取服务器列表', data: {
+      list: serverList,
+      total: total[0].count
+    } });
   } catch(e) {
     console.error(e)
     res.status(200).json({ code: -1, msg: e.message });

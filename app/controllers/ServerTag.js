@@ -36,6 +36,12 @@ const addServerTag = async (req, res, next) => {
   }
 }
 
+/**
+ * 通过名称分页搜索服务器标签
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 const searchServerTagbyName = async (req, res, next) => {
   try {
     const name = req.query.name || ''

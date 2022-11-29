@@ -1,4 +1,4 @@
-## mcservers-node-fe
+## mcservers-node-be
 
 我的世界服务器网（https://www.mcservers.cn）服务端，服务端采用Express+sequelize进行开发
 
