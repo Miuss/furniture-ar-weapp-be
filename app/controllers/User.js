@@ -6,6 +6,7 @@ import { User } from '../models'
 
 const getMainUserInfo = async (req, res, next) => {
   try {
+
     const user = await User.findOne({
       attributes: ['id', 'username', 'description', 'email'],
       where: {
@@ -20,7 +21,6 @@ const getMainUserInfo = async (req, res, next) => {
     res.status(200).json({ code: -1, msg: e.message });
   }
 }
-
 
 /**
  * 通过ID查询用户信息
