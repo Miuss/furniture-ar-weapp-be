@@ -58,6 +58,7 @@ const register = async (req, res, next) => {
   try {
 
     const { email, password, repassword, verifyCode } = req.body
+    console.log(req.session)
 
     const registerVerifyCode = req.session.registerVerifyCode // 从session获取验证码
   
@@ -107,6 +108,8 @@ const register = async (req, res, next) => {
 const sendRegEmailCode = async (req, res, next) => {
   try {
     const { email } = req.body
+
+    console.log(req.session)
 
     const registerVerifyCodeTime = req.session.registerVerifyCodeTime // 上次验证码发送时间
   

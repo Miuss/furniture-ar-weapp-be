@@ -5,29 +5,47 @@ import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import logger from 'morgan'
 import cors from 'cors'
+import redis from 'redis'
 
-import apiV1Router from './app/routes/auth'
 import setSwagger from './app/swagger'
 import setRouter from './app/routes'
 
 const app = express();
 
-setSwagger(app);
+// const RedisStore = require('connect-redis')(session);
+// // 创建Redis连接配置
+// const redisClient = redis.createClient({
+//   host: '103.219.30.40', 
+//   port: 22954,
+//   options: {
+//     password: 'Miu@051900'
+//   }
+// });
 
-app.use(cors());
+setSwagger(app);
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({
-  secret: 'mcservers-cn-2022/11/19',
-  resave : true,
-  rolling: true,
+  // store: new RedisStore({ client: redisClient }),
+  secret: 'mcservers-cn-miuss051900',
+  name: 'mcservers-cn',
+  resave : false,
   saveUninitialized: true, // 是否保存未初始化的会话
   cookie : {
       maxAge : 30 * 60 * 1000, // 设置 session 的有效时间，单位毫秒 这里设置半小时
   },
 }));
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Credentials", true); //划重点
+  res.header("Access-Control-Allow-Origin", req.headers.origin); 
+  res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
+  res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+  res.header("X-Powered-By", ' 3.2.1')
+  next();
+});
 
 setRouter(app);
 

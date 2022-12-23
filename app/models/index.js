@@ -9,6 +9,16 @@ const config = require(__dirname + '/../../config/config.json')[env];
 const db = {};
 
 let sequelize;
+config.dialectOptions = {
+  dateStrings: true,
+  typeCast(field, next) {
+    if (field.type === "DATETIME") {
+      // 返回正确得时间
+      return field.string();
+    }
+    return next();
+  }
+}
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {

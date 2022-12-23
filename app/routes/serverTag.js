@@ -54,6 +54,6 @@ const router = express.Router();
   *       200:
   *         description: success
   */
-  router.route('/search').get(userAuth, searchServerTagbyName);
+  router.route('/search').get(searchServerTagbyName);
 
  export default router;

@@ -1,6 +1,6 @@
 import express from 'express'
 import { userAuth } from '../middlewares/auth'
-import { addServer, getServerStatus, getServerList } from '../controllers/Server'
+import { addServer, getServerStatus, getServerList, getServerInfo } from '../controllers/Server'
 
 const router = express.Router();
 
@@ -96,5 +96,26 @@ router.route('/add').post(userAuth, addServer);
  *         description: success
  */
 router.route('/status').get(userAuth, getServerStatus);
+
+/**
+ * 获取服务器信息
+ * @swagger
+ * /api/v1/server/info:
+ *   get:
+ *     tags:
+ *       - Server
+ *     summary: 获取服务器信息
+ *     description: 获取服务器信息
+ *     parameters:
+ *      - name: id
+ *        in: query
+ *        description: 服务器Id
+ *        required: false
+ *        type: string
+ *     responses:
+ *       200:
+ *         description: success
+ */
+router.route('/info').get(getServerInfo);
 
 export default router;

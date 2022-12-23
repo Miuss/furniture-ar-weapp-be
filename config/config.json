@@ -4,20 +4,23 @@
     "password": "yT6zp8rrxAnBJEnt",
     "database": "mcservers_cn",
     "host": "103.219.30.40",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "timezone": "+08:00"
   },
   "test": {
     "username": "root",
     "password": "Miu051900",
     "database": "mcservers-cn",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "timezone": "+08:00"
   },
   "production": {
     "username": "mcservers_cn",
     "password": "yT6zp8rrxAnBJEnt",
     "database": "mcservers_cn",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "timezone": "+08:00"
   }
 }

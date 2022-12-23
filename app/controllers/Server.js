@@ -173,8 +173,36 @@ const getServerStatus = async (req, res, next) => {
   }
 }
 
+/**
+ * 获取服务器信息
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+const getServerInfo = async (req, res, next) => {
+  const { id } = req.query
+
+  try {
+    if (id == '') {
+      throw new Error('参数错误')
+    }
+
+    const server = await Server.findOne({
+      where: {
+        id
+      }
+    });
+
+    res.status(200).json({ code: 0, msg: '获取服务器信息成功', data: server });
+  } catch(e) {
+    console.error(e)
+    res.status(200).json({ code: -1, msg: e.message });
+  }
+}
+
 export {
   addServer,
   getServerList,
-  getServerStatus
+  getServerStatus,
+  getServerInfo
 }
