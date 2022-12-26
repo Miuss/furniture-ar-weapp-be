@@ -9,7 +9,7 @@ import { sequelize } from '../models'
 const getGlobalServerTotalData = async (req, res, next) => {
   try {
 
-    const [result] = await sequelize.query(`SELECT sum(online) as onlinePlayer, count(*) as onlineServer, createdAt from server_data where createdAt >= (NOW() - INTERVAL 24 HOUR) group by createdAt ORDER BY createdAt ASC`)                                                                       
+    const [result] = await sequelize.query(`SELECT sum(online) as onlinePlayer, count(status = 'online' or null) as onlineServer, createdAt from server_data where createdAt >= (NOW() - INTERVAL 24 HOUR) group by createdAt ORDER BY createdAt ASC`)                                                                       
     const totalData = result.map((item) => {
       return {
         onlinePlayer: parseInt(item.onlinePlayer),
@@ -42,7 +42,7 @@ const getServerStatisticsData = async (req, res, next) => {
       throw new Error('参数错误')
     }
 
-    const [result] = await sequelize.query(`SELECT online, ping, createdAt from server_data where createdAt >= (NOW() - INTERVAL 24 HOUR) and sid = ${serverId} ORDER BY createdAt DESC`)
+    const [result] = await sequelize.query(`SELECT online, ping, createdAt from server_data where createdAt >= (NOW() - INTERVAL 24 HOUR) and sid = ${serverId} ORDER BY createdAt ASC`)
 
     res.status(200).json({ code: 0, msg: '获取服务器统计数据', data: result });
   } catch(e) {

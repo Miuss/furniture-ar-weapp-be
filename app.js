@@ -4,7 +4,6 @@ import express from 'express'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import logger from 'morgan'
-import cors from 'cors'
 import redis from 'redis'
 
 import setSwagger from './app/swagger'
@@ -51,7 +50,9 @@ setRouter(app);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+  if (res.statusCode == null) {
+    next(createError(404));
+  }
 });
 
 // error handler

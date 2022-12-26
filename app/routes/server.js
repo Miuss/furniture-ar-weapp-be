@@ -14,6 +14,11 @@ const router = express.Router();
  *     summary: 获取服务器列表
  *     description: 获取服务器列表
  *     parameters:
+ *      - name: serverStatus
+ *        in: query
+ *        description: 服务器状态（online,offline）
+ *        required: false
+ *        type: string
  *      - name: serverType
  *        in: query
  *        description: 服务器类型（java,pe）
@@ -81,6 +86,11 @@ router.route('/add').post(userAuth, addServer);
  *     summary: 获取MC服务器状态
  *     description: 获取MC服务器状态
  *     parameters:
+ *      - name: type
+ *        in: query
+ *        description: 服务器类型 （java、pe）
+ *        required: false
+ *        type: string
  *      - name: ip
  *        in: query
  *        description: IP地址

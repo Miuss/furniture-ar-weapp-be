@@ -1,6 +1,7 @@
 import { User } from '../models'
 import md5 from '../utils/md5'
 import * as mailer from '../utils/nodemailer'
+import Logger from '../utils/logger'
 
 /**
  * 用户登陆

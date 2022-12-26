@@ -1,4 +1,6 @@
 import { sequelize, User, Server, ServerTag, ServerTagData } from '../models'
+import { queryServerTotalData } from '../services/Server'
+import validator from 'validator'
 import axios from 'axios'
 
 /**
@@ -12,15 +14,34 @@ const addServer = async (req, res, next) => {
 
   try {
     const body = req.body;
-    const serverTags = body.serverTags.split(',')
+    const serverTags = body.serverTags==''?[]:body.serverTags.split(',').map(i => parseInt(i))
 
     if (body.name == '' 
       || body.desc == '' 
       || body.serverIp == '' 
       || body.serverPort == '' 
       || body.serverType == ''
-      || body.serverTags.length == 0) {
+      || serverTags.length == 0) {
       throw new Error('参数错误')
+    }
+
+    if (body.serverType == 'pe') {
+      return new Error('尚未支持基岩版服务器')
+    }
+
+    if (body.name.length > 32) {
+      return new Error('服务器名称太长了，请重试')
+    }
+
+    if (body.desc.length > 100) {
+      return new Error('服务器简介太长了，请重试')
+    }
+
+    console.log(body.serverWebsite)
+
+    // 检查是否填写服务器网站，并检查格式
+    if (body.serverWebsite != undefined && body.serverWebsite != '' && !validator.isURL(body.serverWebsite)) {
+      return new Error('服务器网址格式不正确，请重试')
     }
     
     // 查找是否有重复提交的服务器
@@ -55,7 +76,7 @@ const addServer = async (req, res, next) => {
     const newServer = await Server.create(body)
 
     // 提交服务器标签绑定记录数据
-    const serverTagDatas = Promise.all(serverTags.forEach(async (item) => {
+    const serverTagDatas = Promise.all(serverTags.map(async (item) => {
       return new Promise(async (resolve, reject) => {
         const serverTagData = await ServerTagData.create({
           serverId: newServer.id,
@@ -94,6 +115,7 @@ const getServerList = async (req, res, next) => {
   try {
     const serverTagId = req.query.serverTagId || ''
     const serverType = req.query.serverType || ''
+    const serverStatus = req.query.serverStatus || ''
     const pageIndex = parseInt(req.query.pageIndex || 0)
     const pageSize = parseInt(req.query.pageSize || 10)
     let where = ''
@@ -107,6 +129,13 @@ const getServerList = async (req, res, next) => {
     if (serverType!='') {
       where += `and server.server_type = '${serverType}'`
     }
+
+    //  服务器状态
+    if (serverStatus!='') {
+      where += `and server.server_status = '${serverStatus}'`
+    }
+
+    where += `and server.deletedAt IS NULL`
 
     const result = await sequelize.query(`select distinct server.* from server,server_tag_data where 1=1 ${where} limit ${pageIndex},${pageSize}`, {
       model: Server,
@@ -157,9 +186,28 @@ const getServerList = async (req, res, next) => {
  * @param {*} next 
  */
 const getServerStatus = async (req, res, next) => {
-  const { ip, port} = req.query
+  const { ip, port, type} = req.query
 
   try {
+    if (ip == '' || port == '' || type == '') {
+      throw new Error('参数错误')
+    }
+
+    if (type == 'pe') {
+      throw new Error('尚未支持基岩版服务器')
+    }
+
+    const server = await Server.findOne({
+      where: {
+        serverIp: ip,
+        serverPort: port
+      }
+    });
+
+    if (server != null) {
+      throw new Error('该服务器已在平台发布过啦')
+    }
+
     const result = await axios.get(`http://127.0.0.1:3005/${ip}/${port}`)
 
     if (result.data == '-1') {
@@ -192,6 +240,23 @@ const getServerInfo = async (req, res, next) => {
         id
       }
     });
+
+    if (!server) {
+      throw new Error('该服务器不存在')
+    }
+
+    const serverTags = await sequelize.query(`select server_tag.* from server_tag left join server_tag_data on server_tag.id = server_tag_data.serverTagId where server_tag_data.serverId = ${server.id}`, {
+      model: ServerTag,
+      mapToModel: true // 如果你有任何映射字段,则在此处传递 true
+    })
+
+    server.dataValues.serverTags = serverTags
+    server._previousDataValues.serverTags = serverTags
+
+    //获取历史统计数据
+    const totalData = await queryServerTotalData(server.id)
+    server.dataValues.totalData = totalData
+    server._previousDataValues.totalData = totalData
 
     res.status(200).json({ code: 0, msg: '获取服务器信息成功', data: server });
   } catch(e) {

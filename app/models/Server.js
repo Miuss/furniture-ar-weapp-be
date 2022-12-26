@@ -52,6 +52,30 @@ module.exports = function(sequelize, DataTypes) {
       comment: "服务器在线玩家数",
       field: 'server_online_player'
     },
+    serverIcon: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      comment: "服务器图标",
+      field: 'server_icon'
+    },
+    serverWebsite: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      comment: "服务器官方网站",
+      field: 'server_website'
+    },
+    serverQqGroup: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      comment: "服务器QQ群",
+      field: 'server_qq_group'
+    },
+    serverVideoBili: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      comment: "服务器B站宣传视频",
+      field: 'server_video_bili'
+    },
     serverPing: {
       type: DataTypes.STRING(255),
       allowNull: false,

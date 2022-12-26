@@ -1,31 +1,35 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('ServerTagData', {
+  return sequelize.define('Log', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
-      comment: "服务器标签关联记录Id"
+      primaryKey: true
     },
-    serverId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      comment: "服务器Id"
-    },
-    serverTagId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      comment: "服务器标签Id"
+    type: {
+      type: DataTypes.STRING(255),
+      allowNull: false
     },
     userId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      comment: "创建关联的用户Id"
+      allowNull: true
+    },
+    content: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    ip: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    status: {
+      type: DataTypes.STRING(255),
+      allowNull: false
     }
   }, {
     sequelize,
-    tableName: 'server_tag_data',
+    tableName: 'log',
     timestamps: true,
     paranoid: true,
     indexes: [
