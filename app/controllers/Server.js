@@ -26,22 +26,22 @@ const addServer = async (req, res, next) => {
     }
 
     if (body.serverType == 'pe') {
-      return new Error('尚未支持基岩版服务器')
+      throw new Error('尚未支持基岩版服务器')
     }
 
     if (body.name.length > 32) {
-      return new Error('服务器名称太长了，请重试')
+      throw new Error('服务器名称太长了，请重试')
     }
 
     if (body.desc.length > 100) {
-      return new Error('服务器简介太长了，请重试')
+      throw new Error('服务器简介太长了，请重试')
     }
 
     console.log(body.serverWebsite)
 
     // 检查是否填写服务器网站，并检查格式
     if (body.serverWebsite != undefined && body.serverWebsite != '' && !validator.isURL(body.serverWebsite)) {
-      return new Error('服务器网址格式不正确，请重试')
+      throw new Error('服务器网址格式不正确，请重试')
     }
     
     // 查找是否有重复提交的服务器
@@ -255,6 +255,7 @@ const getServerInfo = async (req, res, next) => {
 
     //获取历史统计数据
     const totalData = await queryServerTotalData(server.id)
+    console.log(totalData)
     server.dataValues.totalData = totalData
     server._previousDataValues.totalData = totalData
 
