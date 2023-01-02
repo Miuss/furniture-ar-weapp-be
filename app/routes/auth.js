@@ -1,6 +1,5 @@
 import express from 'express'
-import * as authController from '../controllers/Auth'
-
+import AuthController from '../controllers/AuthController'
 
 const router = express.Router();
 
@@ -28,7 +27,7 @@ const router = express.Router();
  *       200:
  *         description: success
  */
-router.route('/login').post(authController.login);
+router.route('/login').post(AuthController.login);
 
 
 /**
@@ -59,7 +58,7 @@ router.route('/login').post(authController.login);
  *       200:
  *         description: success
  */
-router.route('/register').post(authController.register);
+router.route('/register').post(AuthController.register);
 
 /**
  * 发送验证码
@@ -83,6 +82,6 @@ router.route('/register').post(authController.register);
  *       200:
  *         description: success
  */
-router.route('/sendCode').post(authController.sendRegEmailCode);
+router.route('/sendCode').post(AuthController.sendRegEmailCode);
 
 export default router;

@@ -1,6 +1,6 @@
 import express from 'express'
 import { userAuth } from '../middlewares/auth'
-import { getGlobalServerTotalData, getServerStatisticsData } from '../controllers/ServerData'
+import ServerDataController from '../controllers/ServerDataController'
 
 const router = express.Router();
 
@@ -17,7 +17,7 @@ const router = express.Router();
  *       200:
  *         description: success
  */
- router.route('/getGlobalServerTotalData').get(getGlobalServerTotalData);
+ router.route('/getGlobalServerTotalData').get(ServerDataController.getGlobalServerTotalData);
 
 /**
  * 获取服务器统计数据
@@ -38,6 +38,6 @@ const router = express.Router();
  *       200:
  *         description: success
  */
- router.route('/getServerStatisticsData').get(getServerStatisticsData);
+ router.route('/getServerStatisticsData').get(ServerDataController.getServerStatisticsData);
 
  export default router;

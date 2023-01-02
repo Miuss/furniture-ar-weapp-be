@@ -30,10 +30,10 @@ app.use(session({
   // store: new RedisStore({ client: redisClient }),
   secret: 'mcservers-cn-miuss051900',
   name: 'mcservers-cn',
-  resave : false,
+  resave: false,
   saveUninitialized: true, // 是否保存未初始化的会话
-  cookie : {
-      maxAge : 30 * 60 * 1000, // 设置 session 的有效时间，单位毫秒 这里设置半小时
+  cookie: {
+    maxAge: 30 * 60 * 1000, // 设置 session 的有效时间，单位毫秒 这里设置半小时
   },
 }));
 

@@ -1,6 +1,6 @@
 import express from 'express'
 import { userAuth } from '../middlewares/auth'
-import { addServerTag, searchServerTagbyName } from '../controllers/ServerTag'
+import ServerTagController from '../controllers/ServerTagController'
 
 const router = express.Router();
 
@@ -25,7 +25,7 @@ const router = express.Router();
  *       200:
  *         description: success
  */
- router.route('/add').post(userAuth, addServerTag);
+ router.route('/add').post(userAuth, ServerTagController.addServerTag);
 
  /**
   * 搜索服务器标签（名称模糊搜索）
@@ -54,6 +54,6 @@ const router = express.Router();
   *       200:
   *         description: success
   */
-  router.route('/search').get(searchServerTagbyName);
+  router.route('/search').get(ServerTagController.searchServerTagbyName);
 
  export default router;
