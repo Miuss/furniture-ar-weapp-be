@@ -74,7 +74,7 @@ export default class AuthController {
         throw new Error('请勿快速重复此操作')
       }
     
-      const code = Utils.randomString(6); //生成随机6位验证码
+      const code = Utils.randomString(6) //生成随机6位验证码
     
       await mailer.sendEmail({
         email: email,
@@ -85,13 +85,13 @@ export default class AuthController {
         }
       })
     
-      req.session.registerVerifyCode = code; // 存入session
-      req.session.registerVerifyCodeTime = Date.now(); // 存入session
+      req.session.registerVerifyCode = code // 存入session
+      req.session.registerVerifyCodeTime = Date.now() // 存入session
     
       res.status(200).json({ code: 0, msg: '发送成功' })
     } catch(e) {
       console.error(e)
-      res.status(200).json({ code: -1, msg: e.message });
+      res.status(200).json({ code: -1, msg: e.message })
     }
   }
 }

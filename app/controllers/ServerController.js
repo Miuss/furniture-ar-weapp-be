@@ -1,4 +1,3 @@
-import { sequelize, User, Server, ServerTag, ServerTagData } from '../models'
 import ServerService from '../services/ServerService'
 import validator from 'validator'
 import axios from 'axios'
