@@ -1,4 +1,5 @@
 import { sequelize, Server, ServerTag, ServerTagData, User } from '../models'
+import ServerTagService from './ServerTagService'
 import validator from 'validator'
 import axios from 'axios'
 
@@ -14,7 +15,6 @@ export default class ServerService {
     const t = await sequelize.transaction()
 
     try {
-
       // 查找是否有重复提交的服务器
       const server = await Server.findOne({
         where: {
@@ -155,14 +155,13 @@ export default class ServerService {
         throw new Error('该服务器不存在')
       }
   
-      const serverTags = await this.serverTagService.queryServerTagByServerId(server.id)
+      const serverTags = await ServerTagService.queryServerTagByServerId(server.id)
   
       server.dataValues.serverTags = serverTags
       server._previousDataValues.serverTags = serverTags
   
       //获取历史统计数据
-      const totalData = await this.serverService.queryServerTotalData(server.id)
-      console.log(totalData)
+      const totalData = await this.queryServerTotalData(server.id)
       server.dataValues.totalData = totalData
       server._previousDataValues.totalData = totalData
 

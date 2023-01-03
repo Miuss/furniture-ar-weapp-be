@@ -1,4 +1,4 @@
-import { ServerTag } from '../models'
+import { sequelize, ServerTag } from '../models'
 import { Op } from 'sequelize'
 
 /**
