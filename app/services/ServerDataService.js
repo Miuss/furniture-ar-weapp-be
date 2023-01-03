@@ -30,7 +30,8 @@ export default class ServerDataService {
    */
   static async queryServerDayChartData(serverId) {
     try {
-      return await sequelize.query(`SELECT online, ping, createdAt from server_data where createdAt >= (NOW() - INTERVAL 24 HOUR) and sid = ${serverId} ORDER BY createdAt ASC`)
+      const [result] = await sequelize.query(`SELECT online, ping, createdAt from server_data where createdAt >= (NOW() - INTERVAL 24 HOUR) and sid = ${serverId} ORDER BY createdAt ASC`)
+      return result
     } catch(e) {
       throw e
     }
