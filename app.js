@@ -5,6 +5,8 @@ import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import logger from 'morgan'
 import redis from 'redis'
+import schedule from 'node-schedule'
+import serverDayReportJob from './app/schedules/serverDayReport'
 
 import setSwagger from './app/swagger'
 import setRouter from './app/routes'
@@ -20,6 +22,9 @@ const app = express();
 //     password: 'Miu@051900'
 //   }
 // });
+
+// 大数据报表定时任务
+const dataJob = schedule.scheduleJob('0 1 1 * * *', () => serverDayReportJob());
 
 setSwagger(app);
 app.use(logger('dev'));

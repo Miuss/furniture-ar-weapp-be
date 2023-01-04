@@ -3,6 +3,7 @@ import user from './user'
 import server from './server'
 import serverTag from './serverTag'
 import serverData from './serverData'
+import serverDataDayReport from './serverDataDayReport'
 
 export default (app) => {
   app.use('/api/v1/auth', auth);  // Auth
@@ -10,4 +11,5 @@ export default (app) => {
   app.use('/api/v1/server', server);  // Server
   app.use('/api/v1/serverTag', serverTag);  // Server Tag
   app.use('/api/v1/serverData', serverData);  // Server Data
+  app.use('/api/v1/serverDataDayReport', serverDataDayReport);  // Server Data Day Report
 }

@@ -98,7 +98,7 @@ export default class ServerService {
 
       where += `and server.deletedAt IS NULL`
 
-      const result = await sequelize.query(`select distinct server.* from server,server_tag_data where server.server_offline_count < 576 ${where} limit ${pageIndex},${pageSize}`, {
+      const result = await sequelize.query(`select distinct server.* from server,server_tag_data where server.server_offline_count < 576 ${where} limit ${pageIndex * pageSize},${pageSize}`, {
         model: Server,
         mapToModel: true // 如果你有任何映射字段,则在此处传递 true
       })
