@@ -17,7 +17,7 @@ export default class ServerTagController {
         throw new Error('参数错误')
       }
       
-      const newServerTag = await ServerTagService.createServerTag(body)
+      const newServerTag = await ServerTagService.createServerTag(body, req.user.id)
 
       res.status(200).json({ code: 0, msg: '服务器标签添加成功', data: newServerTag });
     } catch(e) {

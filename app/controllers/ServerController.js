@@ -57,13 +57,13 @@ export default class ServerController {
    */
   static async getServerList(req, res, next) {
     try {
-      const serverTagId = req.query.serverTagId || ''
+      const serverTag = req.query.serverTag || ''
       const serverType = req.query.serverType || ''
       const serverStatus = req.query.serverStatus || ''
       const pageIndex = parseInt(req.query.pageIndex || 0)
       const pageSize = parseInt(req.query.pageSize || 10)
 
-      const listData = await ServerService.queryServerListByPage(serverTagId, serverType, serverStatus, pageIndex, pageSize)
+      const listData = await ServerService.queryServerListByPage(serverTag, serverType, serverStatus, pageIndex, pageSize)
       
       res.status(200).json({ code: 0, msg: '成功获取服务器列表', data: listData });
     } catch(e) {

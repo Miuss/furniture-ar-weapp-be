@@ -77,13 +77,13 @@ export default class ServerService {
   /**
    * 分页查询服务器列表
    */
-  static async queryServerListByPage (serverTagId, serverType, serverStatus, pageIndex, pageSize) {
+  static async queryServerListByPage (serverTag, serverType, serverStatus, pageIndex, pageSize) {
     try {
       let where = ''
 
       // 服务器标签
-      if (serverTagId!='') {
-        where += `and server.id = server_tag_data.serverId and server_tag_data.serverTagId = '${serverTagId}'`
+      if (serverTag!='') {
+        where += `and server.id = server_tag_data.serverId and server_tag_data.serverTagId = '${serverTag}'`
       }
 
       //  服务器类型
@@ -179,15 +179,24 @@ export default class ServerService {
   static async queryServerTotalData (serverId) {
     try {
       // 近7日在线人数
-      const [result1] = await sequelize.query(`SELECT avg(online) as online FROM server_data WHERE sid = ${serverId} AND createdAt >= (NOW() - INTERVAL 7 DAY)`)
+      const result1 = await sequelize.query(`SELECT avg(online) as online FROM server_data WHERE sid = ? AND createdAt >= (NOW() - INTERVAL 7 DAY)`, {
+        replacements: [serverId], 
+        type: sequelize.QueryTypes.SELECT
+      })
       const sevenDayOnlinePlayer = (result1.length > 0 && result1[0].online != null) ? parseFloat(result1[0].online) : 0
   
       // 昨日最高
-      const [result2] = await sequelize.query(`SELECT max(online) as online FROM server_data WHERE sid = ${serverId} AND createdAt >= (NOW() - INTERVAL 24 HOUR)`)
+      const result2 = await sequelize.query(`SELECT max(online) as online FROM server_data WHERE sid = ? AND createdAt >= (NOW() - INTERVAL 24 HOUR)`, {
+        replacements: [serverId], 
+        type: sequelize.QueryTypes.SELECT
+      })
       const maxDayOnlinePlayer = (result2.length > 0 && result2[0].online != null) ? result2[0].online : 0
   
       // 历史最高
-      const [result3] = await sequelize.query(`SELECT max(online) as online FROM server_data WHERE sid = ${serverId}`)
+      const result3 = await sequelize.query(`SELECT max(online) as online FROM server_data WHERE sid = ?`, {
+        replacements: [serverId], 
+        type: sequelize.QueryTypes.SELECT
+      })
       const maxOnlinePlayer = (result3.length > 0 && result3[0].online != null) ? result3[0].online : 0
   
       return {

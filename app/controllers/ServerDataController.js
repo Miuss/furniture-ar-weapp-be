@@ -48,4 +48,24 @@ export default class ServerDataController {
       res.status(200).json({ code: -1, msg: e.message });
     }
   }
+
+  /**
+   * 获取服务器每日玩家数据报表
+   */
+  static async getServerDayOnlineReport(req, res, next) {
+    try {
+      const serverId = req.query.serverId || ''
+
+      if (serverId == '') {
+        throw new Error('参数错误')
+      }
+
+      const result = await ServerDataService.queryServerDayPlayerOnlineReport(serverId)
+      
+      res.status(200).json({ code: 0, msg: '获取服务器每日玩家数据报表', data: result });
+    } catch(e) {
+      console.error(e);
+      res.status(200).json({ code: -1, msg: e.message })
+    }
+  }
 }

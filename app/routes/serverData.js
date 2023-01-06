@@ -40,4 +40,26 @@ const router = express.Router();
  */
  router.route('/getServerStatisticsData').get(ServerDataController.getServerStatisticsData);
 
+
+/**
+ * 获取服务器统计数据
+ * @swagger
+ * /api/v1/serverData/getServerDayPlayerReport:
+ *   get:
+ *     tags:
+ *       - serverData
+ *     summary: 获取服务器每日玩家数据报表
+ *     description: 获取服务器每日玩家数据报表
+ *     parameters:
+ *      - name: serverId
+ *        in: query
+ *        description: 服务器Id
+ *        required: false
+ *        type: string
+ *     responses:
+ *       200:
+ *         description: success
+ */
+ router.route('/getServerDayPlayerReport').get(ServerDataController.getServerDayOnlineReport);
+
  export default router;

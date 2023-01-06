@@ -4,7 +4,6 @@ import express from 'express'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import logger from 'morgan'
-import redis from 'redis'
 import schedule from 'node-schedule'
 import serverDayReportJob from './app/schedules/serverDayReport'
 
@@ -24,7 +23,7 @@ const app = express();
 // });
 
 // 大数据报表定时任务
-const dataJob = schedule.scheduleJob('0 1 1 * * *', () => serverDayReportJob());
+const dataJob = schedule.scheduleJob('0 15 0 * * *', () => serverDayReportJob());
 
 setSwagger(app);
 app.use(logger('dev'));
