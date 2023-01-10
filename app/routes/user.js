@@ -17,7 +17,10 @@ const router = express.Router();
  *       200:
  *         description: success
  */
-router.route('/info').get(userAuth, UserController.getMainUserInfo);
+router.route('/maininfo').get(userAuth, UserController.getMainUserInfo);
+
+
+router.route('/info').get(UserController.getUserById);
 
 
 export default router;

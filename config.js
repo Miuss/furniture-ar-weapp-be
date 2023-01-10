@@ -11,3 +11,9 @@ export const swaggerConfig = {
     ],
     routerPath: '/api-docs'
 }
+
+export const qiniuConfig = {
+    accessKey:'F_UWTARJKp0t_0OWs3fiDv1U5Y6H39LnSz2apznH',
+    secretKey: 'tlb5nAMuxqjywLdqWbZ9lPnrvndr7rvY0Aa48TNG',
+    bucket: 'img-mcservers-cn'
+}

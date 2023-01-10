@@ -50,6 +50,10 @@ export default class ServerTagService {
             [Op.like]: `${tagName}%`, 
           }
         },
+        order: [
+          // 将转义 title 并针对有效方向列表进行降序排列
+          ['name', 'ASC'],
+        ],
         offset: pageIndex * pageSize,
         limit: pageSize,
       })

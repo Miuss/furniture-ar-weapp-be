@@ -100,6 +100,18 @@ module.exports = function(sequelize, DataTypes) {
       comment: "服务器所在国家",
       field: 'server_country'
     },
+    serverPositionLon: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      comment: "服务器地图经度",
+      field: 'server_position_lon'
+    },
+    serverPositionLat: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      comment: "服务器地址纬度",
+      field: 'server_position_lat'
+    },
     serverOfflineCount: {
       type: DataTypes.INTEGER,
       allowNull: false,

@@ -36,6 +36,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(255),
       allowNull: true,
       comment: "用户token"
+    },
+    roles: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      comment: "用户角色"
     }
   }, {
     sequelize,

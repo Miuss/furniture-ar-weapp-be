@@ -15,14 +15,14 @@ export default class ServerController {
       // 用户Id
       body.userId = req.user.id
       // 解析服务器标签
-      const serverTags = body.serverTags==''?[]:body.serverTags.split(',').map(i => parseInt(i))
+      body.serverTags = body.serverTags==''?[]:body.serverTags.split(',').map(i => parseInt(i))
   
       if (body.name == '' 
         || body.desc == '' 
         || body.serverIp == '' 
         || body.serverPort == '' 
         || body.serverType == ''
-        || serverTags.length == 0) {
+        || body.serverTags.length == 0) {
         throw new Error('参数错误')
       }
   

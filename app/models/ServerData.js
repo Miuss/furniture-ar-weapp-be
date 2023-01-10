@@ -41,6 +41,13 @@ module.exports = function(sequelize, DataTypes) {
           { name: "id" },
         ]
       },
+      {
+        name: "sid",
+        using: "BTREE",
+        fields: [
+          { name: "sid" },
+        ]
+      },
     ]
   });
 };

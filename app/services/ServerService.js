@@ -2,6 +2,7 @@ import { sequelize, Server, ServerTag, ServerTagData, User } from '../models'
 import ServerTagService from './ServerTagService'
 import validator from 'validator'
 import axios from 'axios'
+import { TCPClient } from 'dns2'
 
 /**
  * ServerService
@@ -23,6 +24,8 @@ export default class ServerService {
         }
       })
 
+      console.log(server)
+
       if (server) {
         throw new Error('该服务器已提交过了，请勿重复提交')
       }
@@ -38,17 +41,28 @@ export default class ServerService {
       body.serverVersion = result.data.data.version.name // 服务器版本
       body.serverStatus = 'online'  // 服务器状态（online,offline）
       body.serverCountry = 'CN' // 服务器所在国家编号
+      body.serverPositionLon = '0'
+      body.serverPositionLat = '0'
       body.serverOfflineCount = 0 // 服务器离线次数
 
-      const geoip = await axios.get(`http://ip-api.com/json/${result.data.ip}`)
-      if (geoip.data.status == 'success') {
-        body.serverCountry = geoip.data.countryCode
+      const resolve = TCPClient();
+      const response = await resolve(result.data.ip)
+      const ipAddress = response.answers.pop().address
+
+      if (ipAddress != '') {
+        const geoip = await axios.get(`https://geo.risk3sixty.com/${ipAddress}`)
+        console.log(geoip)
+        if (geoip.data.country != '') {
+          body.serverCountry = geoip.data.country
+          body.serverPositionLat = geoip.data.ll[1]
+          body.serverPositionLon = geoip.data.ll[0]
+        }
       }
 
       const newServer = await Server.create(body)
 
       // 提交服务器标签绑定记录数据
-      const serverTagDatas = Promise.all(serverTags.map(async (item) => {
+      const serverTagDatas = Promise.all(body.serverTags.map(async (item) => {
         return new Promise(async (resolve, reject) => {
           const serverTagData = await ServerTagData.create({
             serverId: newServer.id,
