@@ -27,6 +27,16 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       comment: "用户邮箱"
     },
+    avatarUrl: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      comment: "用户头像"
+    },
+    coverUrl: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      comment: "用户主页封面图"
+    },
     description: {
       type: DataTypes.STRING(255),
       allowNull: true,
