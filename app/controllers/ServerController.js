@@ -73,6 +73,16 @@ export default class ServerController {
 
   }
 
+  static async getServerListByUserId(req, res, next) {
+    try {
+      
+      res.status(200).json({ code: 0, msg: '成功获取服务器列表', data: listData });
+    } catch(e) {
+      console.error(e)
+      res.status(200).json({ code: -1, msg: e.message });
+    }
+  }
+
   /**
    * 获取服务器状态
    */

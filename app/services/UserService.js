@@ -1,4 +1,4 @@
-import { User } from '../models'
+import { User, UserFollow } from '../models'
 
 export default class UserService {
 
@@ -8,11 +8,33 @@ export default class UserService {
   static async queryUserBaseInfo(userId) {
     try {
       const user = await User.findOne({
-        attributes: ['id', 'username', 'description', 'email', 'avatarUrl', 'coverUrl', 'updatedAt', 'createdAt'],
+        attributes: ['id', 'username', 'description', 'avatarUrl', 'coverUrl', 'updatedAt', 'createdAt'],
         where: {
           id: userId
         }
       });
+
+      if (user) {
+        // 查询用户关注人数
+        const follow = await UserFollow.count({
+          where: {
+            userId: user.id
+          }
+        });
+
+        user.dataValues.follow = follow
+        user._previousDataValues.follow = follow
+
+        // 查询用户粉丝人数
+        const fans = await UserFollow.count({
+          where: {
+            followUserId: user.id
+          }
+        });
+
+        user.dataValues.fans = fans
+        user._previousDataValues.fans = fans
+      }
 
       return user
     } catch(e) {
@@ -59,7 +81,6 @@ export default class UserService {
     } catch(e) {
       throw e
     }
-
   }
 
 }

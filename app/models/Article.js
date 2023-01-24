@@ -8,19 +8,25 @@ module.exports = function(sequelize, DataTypes) {
     },
     title: {
       type: DataTypes.STRING(255),
-      allowNull: false
+      allowNull: false,
+      comment: "文章标题"
     },
     content: {
       type: DataTypes.STRING(255),
-      allowNull: false
+      allowNull: false,
+      comment: "文章内容"
     },
-    cover: {
+    coverUrl: {
       type: DataTypes.STRING(255),
-      allowNull: false
+      allowNull: false,
+      comment: "文章封面",
+      field: 'cover_url'
     },
     userId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      comment: "用户Id",
+      field: 'user_id'
     }
   }, {
     sequelize,

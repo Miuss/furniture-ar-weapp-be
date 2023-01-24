@@ -3,6 +3,7 @@ import ServerTagService from './ServerTagService'
 import validator from 'validator'
 import axios from 'axios'
 import { TCPClient } from 'dns2'
+import UserService from './UserService'
 
 /**
  * ServerService
@@ -153,6 +154,55 @@ export default class ServerService {
   }
 
   /**
+   * 分页查询服务器列表
+   */
+  static async queryServerListByUserId (userId) {
+    try {
+      let where = ''
+
+      where += `and server.deletedAt IS NULL`
+
+      const result = await sequelize.query(`select distinct server.* from server,server_tag_data where server.server_offline_count < 576 ${where} limit ${pageIndex * pageSize},${pageSize}`, {
+        model: Server,
+        mapToModel: true // 如果你有任何映射字段,则在此处传递 true
+      })
+
+      const [ total ] = await sequelize.query(`select count(DISTINCT server.id) as count from server,server_tag_data where server.server_offline_count < 576 ${where}`)
+
+      const serverList = await Promise.all(result.map(async (item) => {
+        // 查询服务器标签
+        const serverTags = await sequelize.query(`select server_tag.* from server_tag left join server_tag_data on server_tag.id = server_tag_data.serverTagId where server_tag_data.serverId = ${item.id}`, {
+          model: ServerTag,
+          mapToModel: true // 如果你有任何映射字段,则在此处传递 true
+        })
+
+        item.dataValues.serverTags = serverTags
+        item._previousDataValues.serverTags = serverTags
+
+        // 查询服务器提交人信息
+        const user = await User.findOne({
+          attributes: ['username', 'description'],
+          where: {
+            id: item.userId
+          }
+        });
+
+        item.dataValues.user = user
+        item._previousDataValues.user = user
+
+        return item
+      }))
+
+      return {
+        list: serverList,
+        total: total[0].count
+      }
+    } catch(e) {
+      throw e
+    }
+  }
+
+  /**
    * 通过 服务器Id 查询服务器基础数据
    * @param {*} serverId 
    * @returns 
@@ -173,6 +223,11 @@ export default class ServerService {
   
       server.dataValues.serverTags = serverTags
       server._previousDataValues.serverTags = serverTags
+  
+      const createUserInfo = await UserService.queryUserBaseInfo(server.userId)
+  
+      server.dataValues.createUserInfo = createUserInfo
+      server._previousDataValues.createUserInfo = createUserInfo
   
       //获取历史统计数据
       const totalData = await this.queryServerTotalData(server.id)

@@ -1,4 +1,5 @@
 import { User } from '../models'
+import UserFollowService from '../services/UserFollowService';
 import UserService from '../services/UserService'
 
 /**
@@ -42,6 +43,16 @@ export default class UserController {
       if (user == null) {
         throw new Error('用户不存在');
       }
+
+      let isFollow = false
+
+      // 如果登录查询关注服务器
+      if (req.user != undefined) {
+        isFollow = await UserFollowService.getUserIsFollow(req.user.id, req.query.id)
+      }
+      
+      user.dataValues.isFollow = isFollow
+      user._previousDataValues.isFollow = isFollow
 
       res.status(200).json({ code: 0, msg: '获取用户成功', data: user });
     } catch(e) {

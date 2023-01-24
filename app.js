@@ -23,7 +23,10 @@ const app = express();
 // });
 
 // 大数据报表定时任务
-const dataJob = schedule.scheduleJob('0 15 0 * * *', () => serverDayReportJob());
+if (process.env.NODE_ENV == 'production') {
+  console.log('[定时任务] 定时任务注册成功')
+  const dataJob = schedule.scheduleJob('0 15 0 * * *', () => serverDayReportJob());
+}
 
 setSwagger(app);
 app.use(logger('dev'));
@@ -43,7 +46,7 @@ app.use(session({
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Credentials", true); //划重点
-  res.header("Access-Control-Allow-Origin", req.headers.origin); 
+  res.header("Access-Control-Allow-Origin", req.headers.origin);
   res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
   res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
   res.header("X-Powered-By", ' 3.2.1')
@@ -53,14 +56,14 @@ app.use((req, res, next) => {
 setRouter(app);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   if (res.statusCode == null) {
     next(createError(404));
   }
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
