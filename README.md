@@ -24,3 +24,5 @@ npm run serve # 运行项目（生产环境下运行项目）
 ```
 npm run dbload # 通过数据库表结构生成sequelize模型
 ```
+
+### 测试
