@@ -1,6 +1,7 @@
 import { User } from '../models'
 import UserFollowService from '../services/UserFollowService';
 import UserService from '../services/UserService'
+import { isEmpty } from '../utils/utils'
 
 /**
  * UserController
@@ -34,11 +35,13 @@ export default class UserController {
    */
   static async getUserById (req, res, next) {
     try {
-      if (req.query.id == '') {
+      const { id } = req.query
+      
+      if (isEmpty(id)) {
         throw new Error('参数错误')
       }
 
-      const user = await UserService.queryUserBaseInfo(req.query.id);
+      const user = await UserService.queryUserBaseInfo(id);
 
       if (user == null) {
         throw new Error('用户不存在');
@@ -48,7 +51,7 @@ export default class UserController {
 
       // 如果登录查询关注服务器
       if (req.user != undefined) {
-        isFollow = await UserFollowService.getUserIsFollow(req.user.id, req.query.id)
+        isFollow = await UserFollowService.getUserIsFollow(req.user.id, id)
       }
       
       user.dataValues.isFollow = isFollow

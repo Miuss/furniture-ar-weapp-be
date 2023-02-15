@@ -48,3 +48,26 @@ export const createToken = (user) => {
 export const createSalt = () => {
   return md5(md5(Math.ceil(Math.random() * 100) + md5(new Date().getTime()) + Math.ceil(Math.random() * 100)))
 }
+
+/**
+ * 判断API传参是否为空
+ * @param {*} e 
+ * @returns 
+ */
+export const isEmpty = (e) => {
+  if (typeof e != Array) {
+    if (e == '' || e == undefined || e == null) {
+      return true
+    }
+
+    return false
+  }
+
+  e.forEach((item) => {
+    if (item == '' || item == undefined || item == null) {
+      return true
+    }
+  })
+
+  return false
+}

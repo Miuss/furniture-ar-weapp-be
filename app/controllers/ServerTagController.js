@@ -1,5 +1,6 @@
 import { ServerTag } from '../models'
 import ServerTagService from '../services/ServerTagService'
+import { isEmpty } from '../utils/utils'
 
 /**
  * ServertagController
@@ -13,7 +14,7 @@ export default class ServerTagController {
     try {
       const body = req.body
 
-      if (body.name == '') {
+      if (isEmpty(body.name)) {
         throw new Error('参数错误')
       }
       

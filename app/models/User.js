@@ -51,6 +51,16 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(255),
       allowNull: true,
       comment: "用户角色"
+    },
+    ip: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      comment: "用户最近登录的ip地址"
+    },
+    lastLoginAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      comment: "用户上一次登录时间"
     }
   }, {
     sequelize,

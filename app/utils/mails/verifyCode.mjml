@@ -5,6 +5,11 @@
       <mj-text line-height="120%"></mj-text>
     </mj-attributes>
     <mj-style inline="inline">
+      .header-border {
+        background-color: #527711;
+        height: 10px;
+      }
+      
       .header{
       	display:flex;
       	align-items: center;
@@ -12,29 +17,30 @@
     </mj-style>
   </mj-head>
   <mj-body>
-    <mj-wrapper background-color="#000" border-radius="5px">
+    <mj-wrapper background-color="#edecec" padding="0">
+      <mj-section css-class="header-border">
+      </mj-section>
       <mj-section css-class="header">
-        <mj-column width="40%">
-        </mj-column>
-        <mj-column padding="40px 10px">
-          <mj-text font-size="45px" align="center" color="#fff">注册成功！</mj-text>
+        <mj-column padding="50px 10px 0px 10px">
+          <mj-text font-size="22px" align="center" font-weight="800" color="#444">欢迎注册 我的世界服务器网 账号</mj-text>
         </mj-column>
       </mj-section>
       <mj-section>
         <mj-column>
-          <mj-divider border-color="orange"></mj-divider>
+          <mj-divider border-color="#3b240b"></mj-divider>
         </mj-column>
       </mj-section>
       <mj-section padding="0 20px">
         <mj-column>
-          <mj-text color="#fff" font-size="16px">{{code}}</mj-text>
+          <mj-text color="#555" font-size="14px">欢迎您注册 我的世界服务器网 账号，欢迎您加入我们这个大家庭！</mj-text>
+          <mj-text color="#555" font-size="14px">注册验证码：{{code}}</mj-text>
           <mj-spacer height="10px"></mj-spacer>
-          <mj-button background-color="orange" href="https://www.mcservers.cn">www.mcservers.cn</mj-button>
+          <mj-button background-color="#673ab7" color="#fff" href="https://www.mcservers.cn">www.mcservers.cn</mj-button>
         </mj-column>
       </mj-section>
-      <mj-section>
+      <mj-section padding="70px 0 20px 0">
         <mj-column>
-          <mj-text color="#fff" font-size="16px" align="center">Copyright © 2021. McServers.cn All rights reserved.</mj-text>
+          <mj-text color="#777" font-size="12px" align="center">Copyright © 2022 - 2023. McServers.cn All rights reserved.</mj-text>
         </mj-column>
       </mj-section>
     </mj-wrapper>

@@ -90,6 +90,87 @@ export default class ServerService {
   }
 
   /**
+   * 更新服务器信息
+   * @param {*} body 
+   */
+  static async updateServer (body) {
+    const t = await sequelize.transaction()
+
+    try {
+      // 查找是否有重复提交的服务器
+      const server = await Server.findOne({
+        where: {
+          serverIp: body.serverIp,
+          serverPort: body.serverPort,
+        }
+      })
+
+      if (!server) {
+        throw new Error('该服务器不存在')
+      }
+
+      /**
+       * TODO: 服务器地址或端口更新检测服务器是否在线
+       * （请求https://127.0.0.1:3005获取数据）
+       */
+      if (server.serverIp != body.serverIp || server.serverPort != body.serverPort) {
+
+      }
+
+      body.serverMaxPlayer = result.data.data.players.max // 服务器最大在线人数
+      body.serverOnlinePlayer = result.data.data.players.online // 服务器在线人数
+      body.serverPing = '0' // 服务器延迟（ms）
+      body.serverVersion = result.data.data.version.name // 服务器版本
+      body.serverStatus = 'online'  // 服务器状态（online,offline）
+      body.serverCountry = 'CN' // 服务器所在国家编号
+      body.serverPositionLon = '0'
+      body.serverPositionLat = '0'
+      body.serverOfflineCount = 0 // 服务器离线次数
+
+      const resolve = TCPClient();
+      const response = await resolve(result.data.ip)
+      const ipAddress = response.answers.pop().address
+
+      if (ipAddress != '') {
+        const geoip = await axios.get(`https://geo.risk3sixty.com/${ipAddress}`)
+        console.log(geoip)
+        if (geoip.data.country != '') {
+          body.serverCountry = geoip.data.country
+          body.serverPositionLat = geoip.data.ll[1]
+          body.serverPositionLon = geoip.data.ll[0]
+        }
+      }
+
+      const newServer = await Server.create(body)
+
+      // 提交服务器标签绑定记录数据
+      const serverTagDatas = Promise.all(body.serverTags.map(async (item) => {
+        return new Promise(async (resolve, reject) => {
+          const serverTagData = await ServerTagData.create({
+            serverId: newServer.id,
+            serverTagId: item,
+            userId: body.userId
+          })
+
+          if (serverTagData instanceof ServerTagData) {
+            resolve(serverTagData)
+          }
+
+          reject('数据库提交失败')
+        })
+      }))
+
+      newServer.serverTags = serverTagDatas
+      await t.commit()
+
+      return newServer
+    } catch (e) {
+      await t.rollback()
+      throw e
+    }
+  }
+
+  /**
    * 分页查询服务器列表
    */
   static async queryServerListByPage (serverTag, serverType, serverStatus, pageIndex, pageSize) {
@@ -159,6 +240,8 @@ export default class ServerService {
   static async queryServerListByUserId (userId) {
     try {
       let where = ''
+
+      where +=`and server.userId = ?`
 
       where += `and server.deletedAt IS NULL`
 
@@ -274,6 +357,32 @@ export default class ServerService {
         maxOnlinePlayer,
       }
     } catch (e) {
+      throw e
+    }
+  }
+
+  /**
+   * 分页获取用户发布的服务器列表
+   * @param {*} userId 
+   * @param {*} pageIndex 
+   * @param {*} pageSize 
+   * @returns 
+   */
+  static async queryUserServerListByPage(userId, pageIndex, pageSize) {
+    try {
+      const { count, rows } = await Server.findAndCountAll({
+        where: {
+          userId: userId
+        },
+        offset: (pageIndex - 1) * pageSize,
+        limit: pageSize
+      });
+
+      return {
+        list: rows,
+        total: count
+      }
+    } catch(e) {
       throw e
     }
   }

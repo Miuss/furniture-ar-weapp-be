@@ -1,6 +1,6 @@
 import swaggerUi from 'swagger-ui-express'
 import swaggerJSDoc from 'swagger-jsdoc'
-import { swaggerConfig } from '../../config'
+import { swaggerConfig } from '../config'
 
 export default function setSwagger (app) {
     const options = {

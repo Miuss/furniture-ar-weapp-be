@@ -9,7 +9,7 @@ export default class AuthService {
   /**
    * 用户登录
    */
-  static async login (email, password) {
+  static async login (req, email, password) {
     try {
       const user = await User.findOne({ where: { email } })
 
@@ -28,6 +28,8 @@ export default class AuthService {
       // 登陆成功
       const token = Utils.createToken(user)
 
+      user.ip = Utils.getClientIp(req)
+      user.lastLoginAt = new Date()
       user.token = token
       await user.save()
 
@@ -56,6 +58,7 @@ export default class AuthService {
       const saveUser = await User.create({
         username: '方块人' + Utils.randomString(6),
         email,
+        roles: 'member',
         password: passwordMatch,
         salt,
       })

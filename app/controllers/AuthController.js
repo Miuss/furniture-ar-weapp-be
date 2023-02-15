@@ -14,11 +14,11 @@ export default class AuthController {
     try {
       const { email, password } = req.body
 
-      if (!email || !password) {
-        throw new Error('参数错误')
+      if (Utils.isEmpty([email, password])) {
+        throw new Error('参数错误') 
       }
 
-      const token = await AuthService.login(email, password)
+      const token = await AuthService.login(req, email, password)
 
       res.status(200).json({ code: 0, msg: '登陆成功', data: {
         token: token
@@ -36,7 +36,10 @@ export default class AuthController {
     try {
 
       const { email, password, repassword, verifyCode } = req.body
-      console.log(req.session)
+
+      if (Utils.isEmpty([email, password, repassword, verifyCode])) {
+        throw Error('参数错误')
+      }
 
       const registerVerifyCode = req.session.registerVerifyCode // 从session获取验证码
     

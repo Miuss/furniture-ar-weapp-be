@@ -13,7 +13,7 @@ export default class FileController {
       const putPolicy = new qiniu.rs.PutPolicy(options);
       const uploadToken = putPolicy.uploadToken(mac);
 
-      res.status(200).json({ code: 0, msg: '成功获取服务器状态', data: { token: uploadToken }});
+      res.status(200).json({ code: 0, msg: '成功获取上传文件token', data: { token: uploadToken }});
     } catch(e) {
       console.error(e)
       res.status(200).json({ code: -1, msg: e.message });

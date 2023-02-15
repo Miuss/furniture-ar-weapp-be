@@ -1,6 +1,7 @@
 import ServerService from '../services/ServerService'
 import validator from 'validator'
 import axios from 'axios'
+import { isEmpty } from '../utils/utils'
 
 /**
  * ServerController
@@ -16,13 +17,14 @@ export default class ServerController {
       body.userId = req.user.id
       // 解析服务器标签
       body.serverTags = body.serverTags==''?[]:body.serverTags.split(',').map(i => parseInt(i))
-  
-      if (body.name == '' 
-        || body.desc == '' 
-        || body.serverIp == '' 
-        || body.serverPort == '' 
-        || body.serverType == ''
-        || body.serverTags.length == 0) {
+
+      if (isEmpty([
+        body.name,
+        body.desc,
+        body.serverIp,
+        body.serverPort,
+        body.serverType
+      ]) || body.serverTags.length == 0) {
         throw new Error('参数错误')
       }
   
@@ -90,7 +92,7 @@ export default class ServerController {
     const { ip, port, type} = req.query
 
     try {
-      if (ip == '' || port == '' || type == '') {
+      if (isEmpty([ip, port, type])) {
         throw new Error('参数错误')
       }
 
@@ -118,13 +120,41 @@ export default class ServerController {
     const { id } = req.query
 
     try {
-      if (id == '') {
+      if (isEmpty(id)) {
         throw new Error('参数错误')
       }
 
       const server = await ServerService.queryServerBaseInfoById(id)
 
       res.status(200).json({ code: 0, msg: '获取服务器信息成功', data: server });
+    } catch(e) {
+      console.error(e)
+      res.status(200).json({ code: -1, msg: e.message });
+    }
+  }
+
+  /**
+   * 获取用户服务器列表
+   * @param {*} req 
+   * @param {*} res 
+   * @param {*} next 
+   */
+  static async getUserServerListByPage (req, res, next) {
+    const { userId } = req.query
+    
+    const pageIndex = parseInt(req.query.pageIndex || 0)
+    const pageSize = parseInt(req.query.pageSize || 10)
+
+    try {
+      if (isEmpty([userId])) {
+        throw new Error('参数错误')
+      }
+
+      const result = await ServerService.queryUserServerListByPage(userId, parseInt(pageIndex), parseInt(pageSize))
+
+      res.status(200).json({ code: 0, msg: '获取用户发布的服务器信息成功', data: result });
+      
+
     } catch(e) {
       console.error(e)
       res.status(200).json({ code: -1, msg: e.message });

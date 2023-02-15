@@ -1,5 +1,6 @@
 import { sequelize } from '../models'
 import ServerDataService from '../services/ServerDataService'
+import { isEmpty } from '../utils/utils'
 
 /**
  * ServerDataController
@@ -36,7 +37,7 @@ export default class ServerDataController {
       // const endtime = req.query.endtime || ''
       const serverId = req.query.serverId || ''
 
-      if (serverId == '') {
+      if (isEmpty(serverId)) {
         throw new Error('参数错误')
       }
 
@@ -56,7 +57,7 @@ export default class ServerDataController {
     try {
       const serverId = req.query.serverId || ''
 
-      if (serverId == '') {
+      if (isEmpty(serverId)) {
         throw new Error('参数错误')
       }
 

@@ -7,7 +7,7 @@ import logger from 'morgan'
 import schedule from 'node-schedule'
 import serverDayReportJob from './app/schedules/serverDayReport'
 
-import setSwagger from './app/swagger'
+import setSwagger from './swagger'
 import setRouter from './app/routes'
 
 const app = express();

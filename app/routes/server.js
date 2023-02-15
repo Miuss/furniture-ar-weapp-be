@@ -128,4 +128,33 @@ router.route('/status').get(userAuth, ServerController.getServerStatus);
  */
 router.route('/info').get(ServerController.getServerInfo);
 
+/**
+ * 获取服务器列表
+ * @swagger
+ * /api/v1/server/getUserPublishServerList:
+ *   get:
+ *     tags:
+ *       - Server
+ *     summary: 获取用户发布的服务器列表
+ *     description: 获取用户发布的服务器列表
+ *     parameters:
+ *      - name: userId
+ *        in: query
+ *        description: 用户id
+ *        required: false
+ *        type: string
+ *      - name: pageIndex
+ *        in: query
+ *        required: false
+ *        type: string
+ *      - name: pageSize
+ *        in: query
+ *        required: false
+ *        type: string
+ *     responses:
+ *       200:
+ *         description: success
+ */
+router.route('/getUserPublishServerList').get(ServerController.getUserServerListByPage);
+
 export default router;
