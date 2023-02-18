@@ -157,4 +157,24 @@ router.route('/info').get(ServerController.getServerInfo);
  */
 router.route('/getUserPublishServerList').get(ServerController.getUserServerListByPage);
 
+/**
+ * 获取服务器列表
+ * @swagger
+ * /api/v1/server/getRandomServerList:
+ *   get:
+ *     tags:
+ *       - Server
+ *     summary: 随机获取服务器列表成功
+ *     description: 随机获取服务器列表成功
+ *     parameters:
+ *      - name: pageSize
+ *        in: query
+ *        required: false
+ *        type: string
+ *     responses:
+ *       200:
+ *         description: success
+ */
+router.route('/getRandomServerList').get(ServerController.getRandomServerList);
+
 export default router;

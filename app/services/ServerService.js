@@ -4,6 +4,7 @@ import validator from 'validator'
 import axios from 'axios'
 import { TCPClient } from 'dns2'
 import UserService from './UserService'
+import { Op } from 'sequelize'
 
 /**
  * ServerService
@@ -372,7 +373,10 @@ export default class ServerService {
     try {
       const { count, rows } = await Server.findAndCountAll({
         where: {
-          userId: userId
+          userId: userId,
+          server_offline_count: {
+            [Op.lt]: 576
+          }
         },
         offset: (pageIndex - 1) * pageSize,
         limit: pageSize
@@ -381,6 +385,30 @@ export default class ServerService {
       return {
         list: rows,
         total: count
+      }
+    } catch(e) {
+      throw e
+    }
+  }
+
+  /**
+   * 随机获取服务器列表
+   */
+  static async queryRandomServerList(num) {
+    try {
+      const result = await Server.findAll({
+        where: {
+          server_offline_count: {
+            [Op.lt]: 576
+          }
+        },
+        offset: 0,
+        limit: num,
+        order: [sequelize.random()]
+      });
+
+      return {
+        list: result
       }
     } catch(e) {
       throw e

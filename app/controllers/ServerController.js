@@ -161,4 +161,24 @@ export default class ServerController {
     }
   }
 
+  /**
+   * 随机获取用户服务器列表
+   * @param {*} req 
+   * @param {*} res 
+   * @param {*} next 
+   */
+  static async getRandomServerList (req, res, next) {
+    const pageSize = parseInt(req.query.pageSize || 10)
+
+    try {
+      const result = await ServerService.queryRandomServerList(parseInt(pageSize))
+
+      res.status(200).json({ code: 0, msg: '随机获取服务器列表成功', data: result });
+
+    } catch(e) {
+      console.error(e)
+      res.status(200).json({ code: -1, msg: e.message });
+    }
+  }
+
 }
