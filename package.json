@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_ENV=development nodemon --exec babel-node ./bin/www",
-    "serve": "cnpm install && NODE_ENV=production babel-node ./bin/www",
+    "dev": "cross-env NODE_ENV=development nodemon --exec babel-node ./bin/www",
+    "serve": "cnpm install && cross-env NODE_ENV=production babel-node ./bin/www",
     "dbload": "sequelize-auto -o './app/models' -C -a .modelConfig.json -d mcservers_cn -h 103.219.30.40 -u mcservers_cn -p 3306 -x yT6zp8rrxAnBJEnt -e mysql -T sequelizemeta --noInitModels --caseFile p --caseProp c --caseModel p",
     "db:migrate": "NODE_ENV=production npx sequelize db:migrate"
   },
@@ -17,6 +17,7 @@
     "cookie-parser": "~1.4.4",
     "cookie-session": "^2.0.0",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "crypto": "^1.0.1",
     "debug": "~2.6.9",
     "dns2": "^2.0.5",
