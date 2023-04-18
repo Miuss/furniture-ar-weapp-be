@@ -1,5 +1,4 @@
 import { User } from '../models'
-import UserFollowService from '../services/UserFollowService';
 import UserService from '../services/UserService'
 import { isEmpty } from '../utils/utils'
 
@@ -47,16 +46,6 @@ export default class UserController {
         throw new Error('用户不存在');
       }
 
-      let isFollow = false
-
-      // 如果登录查询关注服务器
-      if (req.user != undefined) {
-        isFollow = await UserFollowService.getUserIsFollow(req.user.id, id)
-      }
-      
-      user.dataValues.isFollow = isFollow
-      user._previousDataValues.isFollow = isFollow
-
       res.status(200).json({ code: 0, msg: '获取用户成功', data: user });
     } catch(e) {
       console.error(e)
@@ -102,4 +91,105 @@ export default class UserController {
       res.status(200).json({ code: -1, msg: e.message });
     }
   }
+
+  /**
+   * 查询用户列表
+   * @param {*} req
+   * @param {*} res
+   * @param {*} next
+   * @returns
+   */
+  static async getUserByPage (req, res, next) {
+    try {
+      const pageIndex = parseInt(req.query.pageIndex || 0)
+      const pageSize = parseInt(req.query.pageSize || 10)
+      const queryForm = req.query.queryForm
+      console.log(queryForm)
+
+      const users = await UserService.queryUserByPage(pageIndex, pageSize, queryForm);
+
+      res.status(200).json({ code: 0, msg: '成功获取用户列表', data: users });
+
+    } catch(e) {
+      console.error(e)
+      res.status(200).json({ code: -1, msg: e.message });
+    }
+  }
+
+  /**
+   * 通过Id查询用户信息（管理）
+   * @param {*} req
+   * @param {*} res
+   * @param {*} next
+   * @returns
+   */
+  static async getUserAdminById (req, res, next) {
+    try {
+      const { id } = req.query
+
+      if (isEmpty(id)) {
+        throw new Error('参数错误')
+      }
+
+      const user = await UserService.queryUserInfo(id);
+
+      if (user == null) {
+        throw new Error('用户不存在');
+      }
+
+      res.status(200).json({ code: 0, msg: '获取用户成功', data: user });
+    } catch(e) {
+      console.error(e)
+      res.status(200).json({ code: -1, msg: e.message });
+    }
+  }
+
+  /**
+   * 通过Id更新用户信息（管理）
+   * @param {*} req
+   * @param {*} res
+   * @param {*} next
+   * @returns
+   */
+  static async updateUserInfoAdmin (req, res, next) {
+    try {
+      const { id } = req.body
+
+      if (isEmpty(id)) {
+        throw new Error('参数错误')
+      }
+
+      const user = await UserService.updateUserInfo(id, req.body)
+
+      res.status(200).json({ code: 0, msg: '更新用户成功', data: user });
+    } catch(e) {
+      console.error(e)
+      res.status(200).json({ code: -1, msg: e.message });
+    }
+  }
+
+  /**
+   * 通过Id删除用户信息（管理）
+   * @param {*} req
+   * @param {*} res
+   * @param {*} next
+   * @returns
+   */
+  static async deleteUserInfoAdmin (req, res, next) {
+    try {
+      const { id } = req.body
+
+      if (isEmpty(id)) {
+        throw new Error('参数错误')
+      }
+
+      const user = await UserService.deleteUserInfo(id)
+
+      res.status(200).json({ code: 0, msg: '删除用户成功', data: user });
+    } catch(e) {
+      console.error(e)
+      res.status(200).json({ code: -1, msg: e.message });
+    }
+  }
+
 }

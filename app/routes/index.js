@@ -1,11 +1,8 @@
 import auth from './auth'
 import user from './user'
-import userFollow from './userFollow'
-import server from './server'
-import serverTag from './serverTag'
-import serverData from './serverData'
-import serverDataDayReport from './serverDataDayReport'
 import file from './file'
+import furniture from './furniture'
+import material from './material'
 import asyncHandler from '../middlewares/asyncHandler'
 
 import { User } from '../models'
@@ -36,10 +33,7 @@ export default (app) => {
 
   app.use('/api/v1/auth', auth);  // Auth
   app.use('/api/v1/user', user);  // User
-  app.use('/api/v1/userFollow', userFollow);  // User
-  app.use('/api/v1/server', server);  // Server
-  app.use('/api/v1/serverTag', serverTag);  // Server Tag
-  app.use('/api/v1/serverData', serverData);  // Server Data
-  app.use('/api/v1/serverDataDayReport', serverDataDayReport);  // Server Data Day Report
-  app.use('/api/v1/file', file);  // Server Data Day Report
+  app.use('/api/v1/furniture', furniture);  // furniture
+  app.use('/api/v1/material', material);  // material
+  app.use('/api/v1/file', file);  // file
 }

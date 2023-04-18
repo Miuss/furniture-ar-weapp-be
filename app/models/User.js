@@ -12,20 +12,10 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       comment: "用户名"
     },
-    password: {
+    description: {
       type: DataTypes.STRING(255),
-      allowNull: false,
-      comment: "用户密码"
-    },
-    salt: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-      comment: "用户密码加密盐值"
-    },
-    email: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-      comment: "用户邮箱"
+      allowNull: true,
+      comment: "用户简介"
     },
     avatarUrl: {
       type: DataTypes.STRING(255),
@@ -37,10 +27,15 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true,
       comment: "用户主页封面图"
     },
-    description: {
+    openId: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      comment: "用户微信小程序账号openid"
+    },
+    sessionKey: {
       type: DataTypes.STRING(255),
       allowNull: true,
-      comment: "用户简介"
+      comment: "微信小程序sessionKey"
     },
     token: {
       type: DataTypes.STRING(255),
@@ -61,6 +56,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DATE,
       allowNull: true,
       comment: "用户上一次登录时间"
+    },
+    adminKey: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      comment: "管理员扫码登录后台key"
     }
   }, {
     sequelize,

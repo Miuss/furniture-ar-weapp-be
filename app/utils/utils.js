@@ -38,7 +38,7 @@ export const matchPassword = (password, salt) => {
  * @returns 
  */
 export const createToken = (user) => {
-  return md5(md5(user.id) + md5(new Date().getTime()) + user.password)
+  return md5(md5(user.openid) + md5(new Date().getTime()) + user.openid)
 }
 
 /**

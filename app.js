@@ -4,29 +4,11 @@ import express from 'express'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import logger from 'morgan'
-import schedule from 'node-schedule'
-import serverDayReportJob from './app/schedules/serverDayReport'
 
 import setSwagger from './swagger'
 import setRouter from './app/routes'
 
 const app = express();
-
-// const RedisStore = require('connect-redis')(session);
-// // 创建Redis连接配置
-// const redisClient = redis.createClient({
-//   host: '103.219.30.40', 
-//   port: 22954,
-//   options: {
-//     password: 'Miu@051900'
-//   }
-// });
-
-// 大数据报表定时任务
-if (process.env.NODE_ENV == 'production') {
-  console.log('[定时任务] 定时任务注册成功')
-  const dataJob = schedule.scheduleJob('0 15 0 * * *', () => serverDayReportJob());
-}
 
 setSwagger(app);
 app.use(logger('dev'));
@@ -35,8 +17,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({
   // store: new RedisStore({ client: redisClient }),
-  secret: 'mcservers-cn-miuss051900',
-  name: 'mcservers-cn',
+  secret: 'ar-miuss-icu-Miu@051900',
+  name: 'ar-miuss-icu',
   resave: false,
   saveUninitialized: true, // 是否保存未初始化的会话
   cookie: {
@@ -57,9 +39,7 @@ setRouter(app);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  if (res.statusCode == null) {
-    next(createError(404));
-  }
+  next(createError(404));
 });
 
 // error handler

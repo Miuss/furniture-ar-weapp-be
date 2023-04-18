@@ -1,35 +1,45 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('ServerData', {
+  return sequelize.define('Furniture', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    sid: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      comment: "服务器id"
-    },
-    status: {
+    name: {
       type: DataTypes.STRING(255),
       allowNull: true,
-      comment: "服务器状态"
+      comment: "家具名称"
     },
-    online: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      comment: "服务器在线人数"
-    },
-    ping: {
+    description: {
       type: DataTypes.STRING(255),
       allowNull: true,
-      comment: "服务器延迟"
+      comment: "家具介绍"
+    },
+    coverUrl: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      comment: "家具封面图片Url"
+    },
+    content: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      comment: "家具介绍"
+    },
+    price: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+      comment: "家具售价"
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      comment: "家具提交用户Id"
     }
   }, {
     sequelize,
-    tableName: 'server_data',
+    tableName: 'furniture',
     timestamps: true,
     paranoid: true,
     indexes: [
@@ -39,13 +49,6 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "id" },
-        ]
-      },
-      {
-        name: "sid",
-        using: "BTREE",
-        fields: [
-          { name: "sid" },
         ]
       },
     ]

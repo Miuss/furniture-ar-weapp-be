@@ -1,5 +1,6 @@
 import express from 'express'
 import AuthController from '../controllers/AuthController'
+import { userAuth, adminAuth } from '../middlewares/auth'
 
 const router = express.Router();
 
@@ -18,10 +19,7 @@ const router = express.Router();
  *          schema:
  *            type: object
  *            properties:
- *              email:
- *                type: string
- *                example: miusssss@qq.com
- *              password:
+ *              code:
  *                type: string
  *     responses:
  *       200:
@@ -29,59 +27,49 @@ const router = express.Router();
  */
 router.route('/login').post(AuthController.login);
 
-
 /**
- * 用户注册
+ * 微信扫码登录确认
  * @swagger
- * /api/v1/auth/register:
+ * /api/v1/auth/confirmAdminLogin:
  *   post:
  *     tags:
  *       - Auth
- *     summary: 用户注册
- *     description: 用户注册
+ *     summary: 微信扫码登录确认
+ *     description: 微信扫码登录确认
  *     requestBody:
  *       content:
  *        application/x-www-form-urlencoded:
  *          schema:
  *            type: object
  *            properties:
- *              email:
- *                type: string
- *                example: miusssss@qq.com
- *              repassword:
- *                type: string
- *              password:
- *                type: string
- *              verifyCode:
+ *              token:
  *                type: string
  *     responses:
  *       200:
  *         description: success
  */
-router.route('/register').post(AuthController.register);
+router.route('/confirmAdminLogin').post(userAuth, AuthController.updateAdminLoginCode);
 
 /**
- * 发送验证码
+ * 微信扫码登录后台
  * @swagger
- * /api/v1/auth/sendCode:
- *   post:
+ * /api/v1/auth/loginAdminNotify:
+ *   get:
  *     tags:
  *       - Auth
- *     summary: 发送验证码
- *     description: 发送验证码
- *     requestBody:
- *       content:
- *        application/x-www-form-urlencoded:
- *          schema:
- *            type: object
- *            properties:
- *              email:
- *                type: string
- *                example: miusssss@qq.com
+ *     summary: 微信扫码登录后台
+ *     description: 微信扫码登录后台
+ *     parameters:
+ *      - name: id
+ *        in: query
+ *        description: 家具Id
+ *        required: false
+ *        type: string
  *     responses:
  *       200:
  *         description: success
  */
-router.route('/sendCode').post(AuthController.sendRegEmailCode);
+router.route('/loginAdminNotify').get(AuthController.loginAdmin)
+
 
 export default router;

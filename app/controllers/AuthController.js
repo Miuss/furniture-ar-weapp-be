@@ -1,7 +1,8 @@
+import { weappConfig } from '../../config'
 import { User } from '../models'
 import AuthService from '../services/AuthService'
 import * as Utils from '../utils/utils'
-import * as mailer from '../utils/nodemailer'
+import Axios from 'axios'
 
 /**
  * AuthController
@@ -12,17 +13,23 @@ export default class AuthController {
    */
   static async login (req, res, next) {
     try {
-      const { email, password } = req.body
+      const { code } = req.body
 
-      if (Utils.isEmpty([email, password])) {
+      if (Utils.isEmpty([code])) {
         throw new Error('参数错误') 
       }
 
-      const token = await AuthService.login(req, email, password)
+      const { data } = await Axios.get(`https://api.weixin.qq.com/sns/jscode2session?appid=${weappConfig.appId}&secret=${weappConfig.appSecrt}&js_code=${code}&grant_type=authorization_code`)
+      if (data.errcode) {
+        // 登录状态失效
+        throw new Error('登录失败，请重试')
+      }
+
+      const token = await AuthService.login(req, data.openid, data.session_key)
 
       res.status(200).json({ code: 0, msg: '登陆成功', data: {
         token: token
-      } })
+      }})
     } catch(e) {
       console.error(e)
       res.status(200).json({ code: -1, msg: e.message });
@@ -30,34 +37,24 @@ export default class AuthController {
   }
 
   /**
-   * 用户注册
+   * 确认登录后台
+   * @param {*} req 
+   * @param {*} res 
+   * @param {*} next 
    */
-  static async register (req, res, next) {
+  static async updateAdminLoginCode (req, res, next) {
     try {
+      const userId = req.user.id;
+      const adminKey = req.body.token;
 
-      const { email, password, repassword, verifyCode } = req.body
-
-      if (Utils.isEmpty([email, password, repassword, verifyCode])) {
-        throw Error('参数错误')
+      if (Utils.isEmpty([userId, adminKey])) {
+        throw new Error('参数错误')
       }
 
-      const registerVerifyCode = req.session.registerVerifyCode // 从session获取验证码
-    
-      if (verifyCode != registerVerifyCode) {
-        throw new Error('邮箱验证码不正确，请重试')
-      }
-    
-      if (password.length < 8) {
-        throw new Error('密码长度必须>=8位，请重试')
-      }
-    
-      if (password != repassword) {
-        throw new Error('两次输入的密码不一致，请重试')
-      }
+      await AuthService.updateAdminLoginKey(userId, adminKey)
 
-      await AuthService.register(email, password)
-    
-      return res.status(200).json({ code: 0, msg: '注册成功' })
+      res.status(200).json({ code: 0, msg: '更新成功', data: { token : adminKey }})
+
     } catch(e) {
       console.error(e)
       res.status(200).json({ code: -1, msg: e.message });
@@ -65,36 +62,29 @@ export default class AuthController {
   }
 
   /**
-   * 发送注册邮箱验证码
+   * 扫码登录后台
+   * @param {*} req 
+   * @param {*} res 
+   * @param {*} next 
    */
-  static async sendRegEmailCode (req, res, next) {
+  static async loginAdmin (req, res, next) {
     try {
-      const { email } = req.body
-
-      const registerVerifyCodeTime = req.session.registerVerifyCodeTime // 上次验证码发送时间
-    
-      if (registerVerifyCodeTime != undefined && registerVerifyCodeTime + 60000 > Date.now()) {
-        throw new Error('请勿快速重复此操作')
+      const adminKey = req.query.token
+      
+      if (Utils.isEmpty([adminKey])) {
+        throw new Error('参数错误')
       }
-    
-      const code = Utils.randomString(6) //生成随机6位验证码
-    
-      await mailer.sendEmail({
-        email: email,
-        title: '注册验证码 ｜ 我的世界服务器网',
-        template: 'verifyCode',
-        keys: {
-          code
-        }
-      })
-    
-      req.session.registerVerifyCode = code // 存入session
-      req.session.registerVerifyCodeTime = Date.now() // 存入session
-    
-      res.status(200).json({ code: 0, msg: '发送成功' })
-    } catch(e) {
+
+      const user = await AuthService.loginAdmin(adminKey)
+
+      res.status(200).json({ code: 0, msg: '登陆成功', data: {token: user.token}})
+
+    } catch (e) {
       console.error(e)
-      res.status(200).json({ code: -1, msg: e.message })
+      if (e.message=='尚未登录') {
+        return res.status(200).json({ code: 0, msg: e.message });
+      }
+      res.status(200).json({ code: -1, msg: e.message });
     }
   }
 }

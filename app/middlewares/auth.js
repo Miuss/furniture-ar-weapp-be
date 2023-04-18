@@ -11,11 +11,15 @@ const userAuth = async (req, res, next) => {
 }
 
 const adminAuth = async (req, res, next) => {
-  if (req.user.isAdmin) {
-    next();
-  }
+  try {
+    if (!req.user.roles.includes('admin')) {
+      throw new Error('Authorization denied, only admins can visit this route');
+    }
 
-  return res.status(401).json({ code: -5, msg: 'Authorization denied, only admins can visit this route'});
+    next();
+  } catch (err) {
+    return res.status(401).json({ code: -5, msg: err.message});
+  }
 }
 
 export {

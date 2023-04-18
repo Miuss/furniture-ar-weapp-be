@@ -1,5 +1,5 @@
 import express from 'express'
-import { userAuth } from '../middlewares/auth'
+import { userAuth, adminAuth } from '../middlewares/auth'
 import FileController from '../controllers/FileController'
 
 const router = express.Router();
@@ -17,6 +17,6 @@ const router = express.Router();
  *       200:
  *         description: success
  */
-router.route('/getFileUploadToken').get(userAuth, FileController.getQiniuUploadToken);
+router.route('/getFileUploadToken').get(userAuth, adminAuth, FileController.getQiniuUploadToken);
 
 export default router;

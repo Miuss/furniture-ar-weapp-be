@@ -1,8 +1,8 @@
 {
   "development": {
-    "username": "mcservers_cn",
-    "password": "yT6zp8rrxAnBJEnt",
-    "database": "mcservers_cn",
+    "username": "furniture_ar",
+    "password": "6hA82CR6Ndn3x8EA",
+    "database": "furniture_ar",
     "host": "103.219.30.40",
     "dialect": "mysql",
     "timezone": "+08:00"
@@ -10,15 +10,15 @@
   "test": {
     "username": "root",
     "password": "Miu051900",
-    "database": "mcservers-cn",
+    "database": "furniture_ar",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "timezone": "+08:00"
   },
   "production": {
-    "username": "mcservers_cn",
-    "password": "yT6zp8rrxAnBJEnt",
-    "database": "mcservers_cn",
+    "username": "furniture_ar",
+    "password": "6hA82CR6Ndn3x8EA",
+    "database": "furniture_ar",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "timezone": "+08:00"
