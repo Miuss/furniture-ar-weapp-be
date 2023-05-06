@@ -52,13 +52,13 @@ export default class FurnitureController {
   static async addFurniture(req, res, next) {
     try {
 
-      const { name, price, content, description, coverUrl } = req.body
+      const { name, content, description, coverUrl } = req.body
 
-      if (isEmpty([name, price, content, description, coverUrl])) {
+      if (isEmpty([name, content, description, coverUrl])) {
         throw new Error('参数错误')
       }
 
-      const result = await FurnitureService.createFurniture(name, price, description, content, coverUrl, req.user.id)
+      const result = await FurnitureService.createFurniture(name, description, content, coverUrl, req.user.id)
 
       res.status(200).json({ code: 0, msg: '成功添加家具', data: result });
     } catch(e) {
@@ -69,13 +69,13 @@ export default class FurnitureController {
 
   static async updateFurniture(req, res, next) {
     try {
-      const { name, price, content, description, coverUrl } = req.body
+      const { name, content, description, coverUrl } = req.body
 
-      if (isEmpty([id, name, price, description, image])) {
+      if (isEmpty([id, name, description, image])) {
         throw new Error('参数错误')
       }
 
-      const result = await FurnitureService.updateFurniture(id, name, price, description, content, coverUrl)
+      const result = await FurnitureService.updateFurniture(id, name, description, content, coverUrl)
       
       res.status(200).json({ code: 0, msg: '成功更新家具信息', data: result });
     } catch(e) {

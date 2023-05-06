@@ -27,11 +27,6 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true,
       comment: "家具介绍"
     },
-    price: {
-      type: DataTypes.FLOAT,
-      allowNull: true,
-      comment: "家具售价"
-    },
     userId: {
       type: DataTypes.INTEGER,
       allowNull: true,

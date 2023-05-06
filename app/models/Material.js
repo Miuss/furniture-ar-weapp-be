@@ -22,6 +22,16 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true,
       comment: "家具材质介绍"
     },
+    price: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+      comment: "家具价格"
+    },
+    coverUrl: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      comment: "家具材质封面URL"
+    },
     modelUrl: {
       type: DataTypes.STRING(255),
       allowNull: true,
