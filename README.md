@@ -1,6 +1,6 @@
-## mcservers-node-be
+## furniture-ar-weapp-be
 
-我的世界服务器网（https://www.mcservers.cn）服务端，服务端采用Express+sequelize进行开发
+AR家具摆放微信小程序服务端
 
 ### 如何运行
 
