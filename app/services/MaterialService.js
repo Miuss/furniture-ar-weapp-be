@@ -35,15 +35,17 @@ export default class MaterialService {
   }
 
   // 添加家具材质
-  static async addMaterial(furnitureId, name, content, modelUrl, md5, modelScale, modelArScale, modelY, userId) {
+  static async addMaterial(furnitureId, name, content, coverUrl, modelUrl, md5, price,modelScale, modelArScale, modelY, userId) {
     const t = await Material.sequelize.transaction();
     try {
       const material = await Material.create({
         furnitureId,
         name,
         content,
+        coverUrl,
         modelUrl,
         md5,
+        price,
         modelScale,
         modelArScale,
         modelY,
@@ -83,7 +85,7 @@ export default class MaterialService {
   }
 
   // 更新家具材质
-  static async updateMaterial(id, furnitureId, name, content, modelUrl, md5, modelScale, modelArScale, modelY, userId) {
+  static async updateMaterial(id, furnitureId, name, content, coverUrl, modelUrl, md5, price, modelScale, modelArScale, modelY, userId) {
     const t = await Material.sequelize.transaction();
     try {
       const material = await Material.findOne({
@@ -98,6 +100,8 @@ export default class MaterialService {
 
       material.name = name;
       material.furnitureId = furnitureId;
+      material.price = price;
+      material.coverUrl = coverUrl;
       material.content = content;
       material.modelUrl = modelUrl;
       material.md5 = md5;
@@ -105,6 +109,8 @@ export default class MaterialService {
       material.modelArScale = modelArScale;
       material.modelY = modelY;
       material.userId = userId;
+
+      console.log(material)
 
       await material.save();
 

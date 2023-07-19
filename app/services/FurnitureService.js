@@ -64,12 +64,11 @@ export default class FurnitureService {
    * @param {*} coverUrl 
    * @returns 
    */
-  static async createFurniture(name, price, description, content, coverUrl, userId) {
+  static async createFurniture(name, description, content, coverUrl, userId) {
     const t = await sequelize.transaction()
     try {
       const result = await Furniture.create({
         name,
-        price,
         description,
         content,
         coverUrl,
@@ -94,13 +93,12 @@ export default class FurnitureService {
    * @param {*} image 
    * @returns 
    */
-  static async updateFurniture(name, price, description, content, coverUrl) {
+  static async updateFurniture(name, description, content, coverUrl) {
     const t = await sequelize.transaction()
     try {
       const result = await Furniture.update(
         {
           name,
-          price,
           description,
           content,
           coverUrl
